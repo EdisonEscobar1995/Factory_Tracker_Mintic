@@ -1,33 +1,38 @@
 // import User Model
 const User = require("../models/userModel");
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // DEFINE CONTROLLER FUNCTIONS
 
-// listAllTodos function - To list all todos
-exports.listAllTodos = (req, res) => {
-  User.find({}, (err, todo) => {
+// listAllUsers function - To list all todos
+exports.listAllUsers = (req, res) => {
+  User.find({}, (err, user) => {
     if (err) {
       res.status(500).send(err);
     }
-    res.status(200).json(todo);
+    res.status(200).json(user);
   });
 };
 
-// createNewTodo function - To create new todo
-exports.createNewTodo = (req, res) => {
+// createNewUser function - To create new user
+exports.createNewUser = (req, res) => {
   console.log('req.body == ', req.body);
-  let newTodo = new User(req.body);
-  console.log('newTodo == ', newTodo);
-  newTodo.save((err, todo) => {
-    if (err) {
-      res.status(500).send(err);
-    }
-    res.status(200).json(todo);
+  const { email, password, status } = req.body;
+  bcrypt.hash(password, 10).then((hash) => {
+    const newUser = new User({ email, password: hash, status });
+    console.log('newUser == ', newUser);
+    newUser.save((err, user) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      res.status(200).json(user);
+    });
   });
 };
 
-// updateTodo function - To update todo status by id
-exports.updateTodo = (req, res) => {
+// updateUser function - To update user status by id
+exports.updateUser = (req, res) => {
   User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true }, (err, todo) => {
     if (err) {
       res.status(500).send(err);
@@ -36,8 +41,8 @@ exports.updateTodo = (req, res) => {
   });
 };
 
-// deleteTodo function - To delete todo by id
-exports.deleteTodo = async (req, res) => {
+// deleteUser function - To delete user by id
+exports.deleteUser = async (req, res) => {
   await User.deleteOne({ _id: req.params.id }, (err) => {
     if (err) {
       return res.status(404).send(err);

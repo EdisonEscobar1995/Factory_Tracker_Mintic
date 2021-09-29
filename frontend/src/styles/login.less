@@ -1,0 +1,79 @@
+@import (once) '~antd/dist/antd.less';
+
+@custom-minimum-login-height: 365px;
+@custom-min-login-form: 277px;
+
+
+.custom-page-container {
+
+  .custom-component-container {
+
+    .ant-row {
+
+      .custom-container-indicator {
+
+        .custom-container-indicator-title {
+
+          .ant-col {
+
+            .custom-login-img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+      }
+
+      .ant-col {
+
+        .custom-login-form {
+          padding: 15px;
+          min-height: @custom-minimum-login-height;
+
+          .custom-login-fields {
+            min-height: @custom-min-login-form;
+          }
+
+          .custom-register-helper {
+            margin-top: 5px;
+
+            .ant-col {
+
+              .custom-login-register {
+                margin-left: 2px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.custom-component-container-login {
+  .function-shadow();
+  height: auto;
+  width: 35%;
+  margin: 20px auto;
+  margin-top: 80px;
+  border-radius: @custom-border-radius;
+  background-color: #ffffff;
+}
+
+.custom-background-login {
+  background-image: url('../img/background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: absolute;
+  width: 100%;
+}
+
+.custom-icono-login {
+  text-align: center;
+  font-size: 92px;
+  color: @primary-color;
+}
+
+.custom-register-helper {
+  margin-top: 20px;
+}

@@ -1,22 +1,26 @@
-// require express and bodyParser
 const express = require("express");
-// Import DB Connection
-
-// Import API route
+require('dotenv').config();
 require("./config/db");
-var routes = require('./api/routes/userRoutes'); //importing route
+const cors = require('cors');
+
+//importing route
+const routesAuth = require('./api/routes/authRoutes');
+const routesUser = require('./api/routes/userRoutes');
 
 // create express app
 const app = express();
 
+app.use(cors());
+
 // define port to run express app
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5002;
 
 // use bodyParser middleware on express app
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-routes(app);
+routesAuth(app);
+routesUser(app);
 
 // Add endpoint
 app.get('/', (req, res) => {
@@ -25,6 +29,5 @@ app.get('/', (req, res) => {
 
 // Listen to server
 app.listen(port, () => {
-
   console.log(`Server running at http://localhost:${port}`);
 });

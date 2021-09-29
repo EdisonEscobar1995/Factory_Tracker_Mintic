@@ -1,0 +1,20 @@
+@import (once) '~antd/dist/antd.less';
+
+// @primary-color: #297535;
+@primary-color: #096dd9;
+@disable-color: #aaaaaa;
+@white: #ffffff;
+
+// Layout
+@layout-header-background: @primary-color;
+@layout-sider-background: @white;
+@layout-trigger-background: @primary-color;
+
+.function-shadow(@x: 1px, @y:1px, @blur:10px, @spread:0, @r:0, @g:0, @b:0, @a:0.2) {
+  -webkit-box-shadow: @x @y @blur @spread rgba(@r, @g, @b, @a);
+  -moz-box-shadow: @x @y @blur @spread rgba(@r, @g, @b, @a);
+  box-shadow: @x @y @blur @spread rgba(@r, @g, @b, @a);
+}
+
+@import (once) "general.less";
+@import (once) 'login.less';

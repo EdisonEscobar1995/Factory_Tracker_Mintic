@@ -6,26 +6,17 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Create Schema Instance and add schema propertise
-const UserSchema = new Schema({
-  email: {
+const RolSchema = new Schema({
+  name: {
     type: String,
     required: true,
     unique: true,
-    allowNull: false,
-  },
-  password: {
-    type: String,
-    required: true,
     allowNull: false,
   },
   status: {
     type: Boolean,
     required: true,
   },
-  roles: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'rolModel'
-  }],
   createdOn: {
     type: Date,
     default: Date.now
@@ -33,4 +24,4 @@ const UserSchema = new Schema({
 });
 
 // create and export model
-module.exports = mongoose.model("userModels", UserSchema);
+module.exports = mongoose.model("rolModel", RolSchema);

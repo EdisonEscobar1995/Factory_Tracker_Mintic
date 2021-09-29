@@ -2,7 +2,7 @@
 const  mongoose = require("mongoose");
 
 //Assign MongoDB connection string to Uri and declare options settings
-var  uri = "url database mongo atlas"
+var  uri = process.env.DB_HOST || '';
 
 // Declare a variable named option and assign optional settings
 const  options = {
@@ -16,6 +16,6 @@ mongoose.connect(uri, options).then(() => {
 },
 err  => {
 {
-  console.log("Error connecting Database instance due to:", err);
+  console.log("Error conectado a la instacion de la Base de datos:", err);
 }
 });
