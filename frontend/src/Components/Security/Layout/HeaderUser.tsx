@@ -26,7 +26,7 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ user, handleLogout, ...rest }:
 
   useEffect(() => {
     if (!checkAuthentication) {
-      window.location.reload();
+      // window.location.reload();
     }
     // eslint-disable-next-line
   }, [checkAuthentication]); // [checkAuthentication, unix]);

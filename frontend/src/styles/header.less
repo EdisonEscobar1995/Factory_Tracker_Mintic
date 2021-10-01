@@ -1,0 +1,49 @@
+@import (once) '~antd/dist/antd.less';
+
+.custom-layout {
+
+  .custom-header {
+    padding: 0;
+    overflow: hidden;
+
+    .custom-tooltip {
+      color : #fff;
+      margin: 8px;
+    }
+
+    .ant-row {
+      width: 100%;
+
+      .ant-col {
+
+        .custom-friends-icon {
+          background-color: inherit;
+          color: @white;
+        }
+
+        .custom-header-user {
+          text-align: left;
+          cursor: pointer;
+          color: white;
+
+          .ant-avatar {
+            margin-right: 5px;
+          }
+        }
+
+        .custom-logo-container {
+          width           : 200px;
+          height          : 64px;
+          background-color: @white;
+
+          .custom-logo {
+            background-color: inherit;
+            max-width       : 200px;
+            height          : 64px;
+            padding         : 0 19px;
+          }
+        }
+      }
+    }
+  }
+}

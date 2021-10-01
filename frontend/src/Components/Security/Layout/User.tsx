@@ -10,14 +10,15 @@ interface IUserProps {
 
 const User: React.FC<IUserProps> = ({ history, user, ...rest }: IUserProps) => {
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     // await client.mutate({ mutation: LOGOUT });
     // TODO: check logout
     // history.push('/');
-    window.location.reload();
+    debugger;
+    // window.location.reload();
   };
 
-  return <HeaderUser user={user} handleLogout={handleLogout} {...rest} />;
+  return <HeaderUser user={user} handleLogout={() => handleLogout} {...rest} />;
 };
 
 export default withRouter(User);

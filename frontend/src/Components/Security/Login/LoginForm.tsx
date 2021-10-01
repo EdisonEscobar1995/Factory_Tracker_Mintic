@@ -40,9 +40,9 @@ const LoginForm: React.FC<ILoginFormProps> = ({ handleSubmit, loading }: ILoginF
         <div className="custom-login-fields">
           <Form.Item
             label="Correo"
-            name="username"
+            name="email"
             rules={[
-              { message: '¡Correo requerido!', required: true },
+              { message: '¡Correo requerido!', required: true, type: 'email' },
             ]}
             {...formLayout}
           >

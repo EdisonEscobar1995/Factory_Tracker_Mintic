@@ -42,7 +42,7 @@ const ResultTitle: React.FC<IResultTitleProps> = ({ type }: IResultTitleProps) =
         <div className="custom-home-info">
           <InfoCircleFilled />
           <br />
-          <h3>{('common.information')}</h3>
+          <h3>INFORMACIÓN</h3>
         </div>
       );
     case 'users':

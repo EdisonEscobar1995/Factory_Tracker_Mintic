@@ -8,6 +8,7 @@ import Layout from './Layout';
 import { routes } from '../../../config/Security/Routes';
 import useAuthentication from '../../../hooks/useAuthentication';
 import asyncFiles from '../../../config/Security/Routes/asyncFiles';
+import { menus as myMenus } from '../../../config/Shared/Menu';
 
 const redirection = (logged: boolean) => (logged
   ? routeConstants.URL_HOME
@@ -22,27 +23,35 @@ const LayoutContainer: FC<RouteComponentProps<MatchParams>> = ({
 }: RouteComponentProps<MatchParams>) => {
   const [collapse, setCollapsed] = useState(false);
   const [redirect] = useState(redirection(false));
-  console.log('redirect = ', redirect);
   const location = useLocation();
+  const [menus] = useState(myMenus());
 
   const {
-    logged, user, loading
+    logged, user, loading, setAuthentication
   } = useAuthentication();
 
-  console.log('logged == ', logged);
-
   useEffect(() => {
-    if (logged && location.pathname.indexOf(`${routeConstants.URL_WITHOUT_LAYOUT}`) > -1) {
-      window.history.pushState(null, '', routeConstants.URL_HOME);
+    if (logged && localStorage.getItem('token') && location.pathname.indexOf(`${routeConstants.URL_WITHOUT_LAYOUT}`) > -1) {
+      // window.history.pushState(null, '', routeConstants.URL_HOME);
+      if (!logged) {
+        setAuthentication({
+          logged: true,
+          loading: false,
+          user: undefined,
+        })
+      }
+      history.push(routeConstants.URL_HOME);
     }
   }, [logged]);
+
+  console.log('logged == ', logged, ' loading == ', loading);
 
   const handleCollapse = () => setCollapsed(!collapse);
 
   return (
     <Switch>
       <Route exact path="/" render={() => <Redirect to={redirect} />} />
-       {!logged && (
+      {!logged && (
         <Route
           path={routeConstants.URL_WITHOUT_LAYOUT}
           render={() => (
@@ -50,6 +59,7 @@ const LayoutContainer: FC<RouteComponentProps<MatchParams>> = ({
               user={user}
               routes={routes.filter(({ layout }) => !layout)}
               toRedirect
+              setAuthentication={setAuthentication}
             />
           )}
         />
@@ -59,7 +69,7 @@ const LayoutContainer: FC<RouteComponentProps<MatchParams>> = ({
           path={pathname}
           collapsed={collapse}
           handleCollapse={handleCollapse}
-          headerMenus={[]}
+          menus={menus.primary || []}
           user={user}
           history={history}
         >
@@ -72,9 +82,10 @@ const LayoutContainer: FC<RouteComponentProps<MatchParams>> = ({
           />
         </Layout>
       )}
-      {!logged && !loading && (
+      {/* {!logged && (
         <Route render={() => <Redirect to={redirect} />} />
-      )}
+      )} */}
+      
       <Route path="/404" component={asyncFiles.notFound} />
     </Switch>
   );

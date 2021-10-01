@@ -1,6 +1,6 @@
 const constantsRoutes = {
   URL_FORGOT_PASSWORD: '/forgotPassword',
-  URL_HOME: '/general/home',
+  URL_HOME: '/home',
   URL_LOGIN: '/login',
   URL_REGISTER: '/register',
   URL_INFORMATION_REGISTER: '/informationRegister',
