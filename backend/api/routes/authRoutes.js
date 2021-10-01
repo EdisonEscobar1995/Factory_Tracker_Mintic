@@ -8,4 +8,7 @@ module.exports = function (app) {
     .route("/login")
     .post(auth.login);
 
+  app
+    .route("/verifyAuthenticate")
+    .post(auth.verifyJwt)
 };

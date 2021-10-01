@@ -6,6 +6,7 @@ const cors = require('cors');
 //importing route
 const routesAuth = require('./api/routes/authRoutes');
 const routesUser = require('./api/routes/userRoutes');
+const routesSale = require('./api/routes/saleRoutes');
 
 // create express app
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.json());
 
 routesAuth(app);
 routesUser(app);
+routesSale(app);
 
 // Add endpoint
 app.get('/', (req, res) => {
