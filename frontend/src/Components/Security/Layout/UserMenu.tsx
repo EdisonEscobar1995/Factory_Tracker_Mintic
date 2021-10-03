@@ -37,7 +37,7 @@ const UserMenu: React.FC<IUserMenu> = ({ handleLogout, ...rest }: IUserMenu) => 
         </Menu.Item>
       ))}
       <Menu.Item key={-1} onClick={handleLogout}>
-        <LogoutOutlined />
+        <LogoutOutlined style={{ marginRight: '2px' }} />
         Cerrar sesión
       </Menu.Item>
     </Menu>

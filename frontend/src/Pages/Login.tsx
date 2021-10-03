@@ -2,37 +2,46 @@ import React, { useState } from 'react';
 import { LoginForm } from '../Components/Security/Login';
 import { Row, Col } from 'antd';
 import { ShopOutlined } from '@ant-design/icons';
-import { routeConstants } from '../config/Shared/Constants';
-import { IAuthProps, ILoginProps, ILoginValues } from '../Interfaces/Login/login';
-import { login } from '../api/login';
+import { ILoginProps, ILoginValues } from '../Interfaces/Login/login';
+import { login, auth, loginWithGoogle } from '../api/login';
 import message from '../Components/Shared/message';
-import { AxiosResponse } from 'axios';
+import { User, UserCredential } from 'firebase/auth';
 
 const Login: React.FC<ILoginProps> = ({ history, setAuthentication }: ILoginProps) => {
 
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (values: ILoginValues) => {
-    /* const handleSuccess = ({ data }) => {
-      setLoading(false);
-      const { login } = data;
-      if (login?.token?.accessToken) {
-        history.push(`${routeConstants.URL_HOME}/_`);
-      }
-    }; */
     setLoading(true);
     login(values)
-    .then((response: AxiosResponse) => {
-      const data: IAuthProps = response?.data;
-      localStorage.setItem('token', data?.token);
-      localStorage.setItem('user', JSON.stringify(data?.user));
-      setAuthentication({
-        logged: true,
-        loading: false,
-        user: data?.user
-      })
-      console.log('type response = ', data);
-      setLoading(false);
+    .then((userCredential: UserCredential) => {
+      const user: User = userCredential.user;
+      const { providerData, uid, email } = user;
+      auth.currentUser?.getIdToken().then(
+        token => {
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify({ providerData, uid, email }));
+          setAuthentication({
+            logged: true,
+            loading: false,
+            user
+          })
+          setLoading(false);
+          /* updateDataUser(user).catch((error) => {
+            console.log('error update = ', error);
+            const errorUp = 'Error de autenticacion actualizando users';
+            message({ type: 'warning', text: errorUp });
+            localStorage.clear();
+            setAuthentication({
+              logged: false,
+              loading: false,
+              user
+            });
+            setLoading(false);
+            window.location.reload();
+          }); */
+        }
+      )
     })
     .catch((err) => {
       console.log(err);
@@ -45,6 +54,11 @@ const Login: React.FC<ILoginProps> = ({ history, setAuthentication }: ILoginProp
       .then(handleSuccess)
       .catch(() => setLoading(false)); */
   };
+
+  const handleLoginGoogle = () => {
+    loginWithGoogle(setAuthentication, setLoading);
+  };
+
   const { innerHeight: height } = window;
 
   return (
@@ -58,6 +72,7 @@ const Login: React.FC<ILoginProps> = ({ history, setAuthentication }: ILoginProp
             </div>
             <LoginForm
               handleSubmit={handleSubmit}
+              handleLoginGoogle={handleLoginGoogle}
               loading={loading}
             />
           </Col>

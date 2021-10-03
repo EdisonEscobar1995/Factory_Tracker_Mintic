@@ -13,6 +13,11 @@ const routes = [
     url: '/login',
   }),
   createRoutes({
+    component: asyncFiles.register,
+    layout: false,
+    url: '/register',
+  }),
+  createRoutes({
     component: asyncFiles.home,
     layout: true,
     url: '/home',

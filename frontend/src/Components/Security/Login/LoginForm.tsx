@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import {
   Button, Col, Form, Input, Row
 } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined, GoogleOutlined } from '@ant-design/icons';
 import { routeConstants } from '../../../config/Shared/Constants';
 import { Loading } from '../../Shared';
 import { ILoginFormProps, ILoginValues } from '../../../Interfaces/Login/login';
 
-const LoginForm: React.FC<ILoginFormProps> = ({ handleSubmit, loading }: ILoginFormProps) => {
+const LoginForm: React.FC<ILoginFormProps> = ({ handleSubmit, handleLoginGoogle, loading }: ILoginFormProps) => {
   const [form] = Form.useForm();
 
   const formLayout = {
@@ -64,8 +64,8 @@ const LoginForm: React.FC<ILoginFormProps> = ({ handleSubmit, loading }: ILoginF
             />
           </Form.Item>
         </div>
-        <Row>
-          <Col offset={9} span={7}>
+        <Row justify={'center'}>
+          <Col span={10}>
             <Button
               type="primary"
               htmlType="submit"
@@ -82,12 +82,25 @@ const LoginForm: React.FC<ILoginFormProps> = ({ handleSubmit, loading }: ILoginF
             </span>
             <b>
               <Link
-                to={`${routeConstants.URL_WITHOUT_LAYOUT}${routeConstants.URL_INFORMATION_REGISTER}`}
+                to={`${routeConstants.URL_WITHOUT_LAYOUT}${routeConstants.URL_REGISTER}`}
                 className="custom-login-register"
               >
                 Crear cuenta
               </Link>
             </b>
+          </Col>
+        </Row>
+        <Row className="custom-register-helper">
+          <Col span={24}>
+            <Button
+              type="primary"
+              danger
+              className="custom-full-width"
+              onClick={handleLoginGoogle}
+            >
+              <GoogleOutlined />
+              Ingrese con Google
+            </Button>
           </Col>
         </Row>
       </Loading>

@@ -15,10 +15,12 @@ const User: React.FC<IUserProps> = ({ history, user, ...rest }: IUserProps) => {
     // TODO: check logout
     // history.push('/');
     debugger;
-    // window.location.reload();
+    localStorage.clear();
+    history.push('/');
+    window.location.reload();
   };
 
-  return <HeaderUser user={user} handleLogout={() => handleLogout} {...rest} />;
+  return <HeaderUser user={user} handleLogout={handleLogout} {...rest} />;
 };
 
 export default withRouter(User);
