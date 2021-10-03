@@ -23,7 +23,6 @@ const LoginForm: React.FC<ILoginFormProps> = ({ handleSubmit, handleLoginGoogle,
   }; */
 
   const onFinish = (values: ILoginValues) => {
-    console.log('values = ', values);
     handleSubmit(values);
   };
 

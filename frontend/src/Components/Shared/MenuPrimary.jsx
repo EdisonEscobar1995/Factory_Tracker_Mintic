@@ -24,8 +24,6 @@ const MenuPrimary = ({
     }
   }, [menus]);
 
-  console.log('myMenu == ', myMenu);
-
   return (
     <Loading loading={loading} custom="custom-component-spin">
       <Menu mode="inline" selectedKeys={[pathname]}>

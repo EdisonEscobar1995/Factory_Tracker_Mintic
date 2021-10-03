@@ -14,8 +14,7 @@ const RegisterForm: React.FC<IRegisterFormProps> = ({ loading, handleRegister, h
   const [form] = Form.useForm();
 
   const onFinish = (values: ILoginValues) => {
-    console.log('values = ', values);
-    // handleRegister(values);
+    handleRegister(values);
   };
 
   return (
@@ -42,7 +41,7 @@ const RegisterForm: React.FC<IRegisterFormProps> = ({ loading, handleRegister, h
           </Form.Item>
           <Form.Item
             label="Nombre"
-            name="firstName"
+            name="name"
             rules={[
               { message: '¡Nombre requerido!', required: true },
             ]}

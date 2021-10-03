@@ -18,7 +18,7 @@ export interface ILoginValues {
   email: string;
   password: string;
   name?: string;
-  lastname?: string;
+  lastName?: string;
 }
 
 export interface IRol {

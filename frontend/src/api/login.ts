@@ -22,6 +22,7 @@ const loginWithGoogle = async (setAuthentication: Function, setLoading: Function
     const token = credential?.accessToken;
     const user = result.user;
     if (token) {
+      updateDataUser(user, '');
       const { providerData, uid, email } = user;
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify({ providerData, uid, email }));
@@ -29,7 +30,7 @@ const loginWithGoogle = async (setAuthentication: Function, setLoading: Function
         logged: true,
         loading: false,
         user
-      })
+      });
     }
     setLoading(false);
   } catch (error) {
@@ -38,33 +39,22 @@ const loginWithGoogle = async (setAuthentication: Function, setLoading: Function
 }
 
 const register = (credentials: ILoginValues) => {
-  const { email, password, name, lastname } = credentials;
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      updateProfile(user, {
-        displayName: `${name} ${lastname}`,
-      })
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-    });
+  const { email, password } = credentials;
+  return createUserWithEmailAndPassword(auth, email, password);
 }
 
-const updateDataUser = (user: User) => {
+const updateDataUser = (user: User, displayName: string) => {
   const db = getFirestore();
   // collection(db, 'users').where("author", "==", user.uid).get()
-  let rolesAux: IRol = {
+  const rolesAux: IRol = {
     seller: true,
   };
-  if (user.email === 'pachaedison@gmail.com') rolesAux = { admin: true };
   const dataUser: IUser = {
     id: user.uid,
     email: user.email,
-    displayName: user.displayName ? user.displayName : 'Administrador',
+    displayName: user.displayName ? user.displayName : displayName,
     roles: rolesAux
-  }
+  };
   let referencia = doc(db, 'users', user.uid);
   return setDoc(referencia, dataUser);
   // return setDoc(doc(db, `users/${user.uid}`, 'LA'), dataUser);
@@ -75,5 +65,6 @@ export {
   login,
   loginWithGoogle,
   updateDataUser,
+  register,
   auth
 }

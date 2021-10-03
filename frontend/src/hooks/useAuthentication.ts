@@ -14,7 +14,6 @@ const useAuthentication = () => {
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      console.log('autenticacion hook..');
       setAuthentication({
         logged: true,
         loading: false,

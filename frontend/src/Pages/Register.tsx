@@ -3,13 +3,31 @@ import { Col, Row } from 'antd';
 import { ShopOutlined } from '@ant-design/icons';
 import { RegisterForm } from '../Components/Security/Login';
 import { ILoginValues, IRegisterProps } from '../Interfaces/Login/login';
+import { updateDataUser, register } from '../api/login';
+import { updateProfile, UserCredential } from 'firebase/auth';
+import message from '../Components/Shared/message';
 
 const Register: React.FC<IRegisterProps> = ({ history }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { innerHeight: height } = window;
 
   const handleRegister = (values: ILoginValues) => {
-
+    setLoading(true);
+    register(values).then((userCredential: UserCredential) => {
+      const user = userCredential.user;
+      const { name, lastName } = values;
+      updateProfile(user, {
+        displayName: `${name} ${lastName}`,
+      });
+      updateDataUser(user, `${name} ${lastName}`).catch((error) => {
+        console.log('error update = ', error);
+        message({ type: 'warning', text: error });
+        setLoading(false);
+      });
+      setLoading(false);
+      history.push('/raw/login');
+      message({ type: 'succes', text: 'Usuario creado con éxito' });
+    });
   };
 
   const handleCancel = () => {
