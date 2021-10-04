@@ -27,3 +27,10 @@ export const createMenuParent = (icon: ReactNode, key: string, subMenus: any[], 
   subMenus,
   items: subMenus
 });
+
+export const pathTreatment = (path: string): string => {
+  if (path?.split('/').length > 1) {
+    return path.split('/')[1];
+  }
+  return '';
+};

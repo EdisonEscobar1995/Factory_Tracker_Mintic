@@ -7,7 +7,7 @@ const NotFound404: FC = () => {
     <Result
       status="404"
       title="404"
-      subTitle={`common.pageNotFound' | 404`}
+      subTitle={'Página no encontrada! | 404'}
     />
   );
 };

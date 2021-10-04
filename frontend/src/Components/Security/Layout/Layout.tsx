@@ -1,12 +1,12 @@
-import React, { FC, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { Layout as AntLayout, Col, Row } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
 import User from './User';
-import InputTooltip from '../../Shared/InputTooltip';
 import Logo from '../../Shared/Logo';
 import { CollapseType } from 'antd/lib/layout/Sider';
 import { Link } from 'react-router-dom';
 import MenuPrimary from '../../Shared/MenuPrimary';
+import { pathTreatment } from '../../../utils/common';
+import { routes } from '../../../config/Security/Routes';
 
 interface ILayoutProps {
   path: string,
@@ -18,7 +18,7 @@ interface ILayoutProps {
   children: ReactNode,
 }
 
-const Layout: FC<ILayoutProps> = ({
+const Layout: React.FC<ILayoutProps> = ({
   path,
   collapsed,
   handleCollapse,
@@ -28,6 +28,17 @@ const Layout: FC<ILayoutProps> = ({
   children,
 }: ILayoutProps) => {
   const { innerHeight: height } = window;
+
+  const foundMenu = (pathname: string): string => {
+    const route = routes.find(
+      ({ path }) => pathTreatment(path || '') === pathTreatment(pathname)
+    );
+    if (route) {
+      return `${route?.target || ''}`;
+    }
+    return '';
+  };
+
   return (
     <AntLayout className="custom-layout">
       <AntLayout.Header className="custom-header">
@@ -35,8 +46,8 @@ const Layout: FC<ILayoutProps> = ({
           <Col span={4}>
             <Logo />
           </Col>
-          <Col offset={17} span={3}>
-            <User  />
+          <Col offset={15} span={3}>
+            <User user={user} />
           </Col>
         </Row>
       </AntLayout.Header>
@@ -50,7 +61,7 @@ const Layout: FC<ILayoutProps> = ({
           >
             <MenuPrimary
               Link={Link}
-              pathname={path}
+              pathname={path && foundMenu(path)}
               menus={menus}
               // data={data}
               // loading={loading}

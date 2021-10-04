@@ -1,5 +1,5 @@
-import { RouteComponentProps } from "react-router-dom";
-import { MatchParams } from "../shared/common";
+import { RouteComponentProps } from 'react-router-dom';
+import { MatchParams } from '../shared/common';
 
 export interface ILoginProps extends RouteComponentProps<MatchParams> {
   setAuthentication?: any;

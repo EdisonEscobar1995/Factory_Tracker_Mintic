@@ -5,3 +5,5 @@ export { default as Loading } from './Loading';
 export { default as ResultTitle } from './ResultTitle';
 export { default as RawContainer } from './RawContainer';
 export { default as Logo } from './Logo';
+export { default as Table } from './Table';
+export { default as ActionButton } from './ActionButton';

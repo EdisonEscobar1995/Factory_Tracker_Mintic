@@ -31,7 +31,6 @@ const UserMenu: React.FC<IUserMenu> = ({ handleLogout, ...rest }: IUserMenu) => 
         path, index, icon, title
       }: IMenuProps) => (
         <Menu.Item key={index} onClick={() => history.push(path)}>
-          {/* {icon && <Icon type={icon} />} */}
           {icon}
           {title}
         </Menu.Item>

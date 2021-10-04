@@ -21,11 +21,24 @@ const routes = [
     component: asyncFiles.home,
     layout: true,
     url: '/home',
+    target: 'home'
+  }),
+  createRoutes({
+    component: asyncFiles.sales,
+    layout: true,
+    url: '/sales',
+    target: 'sales'
+  }),
+  createRoutes({
+    component: asyncFiles.registerSale,
+    layout: true,
+    url: '/registerSale/:id?',
+    target: 'sales'
   }),
   createRoutes({
     component: asyncFiles.notFound,
-    layout: false,
-    url: '/register',
+    layout: true,
+    url: undefined,
   }),
 ];
 

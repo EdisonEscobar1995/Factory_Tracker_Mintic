@@ -5,7 +5,7 @@ import { ShopOutlined } from '@ant-design/icons';
 import { ILoginProps, ILoginValues } from '../Interfaces/Login/login';
 import { login, auth, loginWithGoogle } from '../api/login';
 import message from '../Components/Shared/message';
-import { User, UserCredential } from 'firebase/auth';
+import { updateProfile, User, UserCredential } from 'firebase/auth';
 
 const Login: React.FC<ILoginProps> = ({ history, setAuthentication }: ILoginProps) => {
 
