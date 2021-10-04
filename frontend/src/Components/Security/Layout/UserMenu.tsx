@@ -31,13 +31,12 @@ const UserMenu: React.FC<IUserMenu> = ({ handleLogout, ...rest }: IUserMenu) => 
         path, index, icon, title
       }: IMenuProps) => (
         <Menu.Item key={index} onClick={() => history.push(path)}>
-          {/* {icon && <Icon type={icon} />} */}
           {icon}
           {title}
         </Menu.Item>
       ))}
       <Menu.Item key={-1} onClick={handleLogout}>
-        <LogoutOutlined />
+        <LogoutOutlined style={{ marginRight: '2px' }} />
         Cerrar sesión
       </Menu.Item>
     </Menu>

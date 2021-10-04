@@ -4,10 +4,12 @@ import { Menu, Tooltip } from 'antd';
 import Loading from './Loading';
 
 const MenuPrimary = ({
-  t, pathname, menus, globalScope, loading, Link
+  pathname, menus, globalScope, loading, Link
 }) => {
   const { companyId } = globalScope || {};
   const [myMenu, setMyMenu] = useState([]);
+
+  console.log('pathname == ', pathname);
 
   const getMenu = (dataMyMenu) => (dataMyMenu || []).map((menu) => {
     menu.submenu = (menu.items || []).reduce((result, { key, ...rest }) => {
@@ -23,8 +25,6 @@ const MenuPrimary = ({
       setMyMenu(getMenu(menus || []));
     }
   }, [menus]);
-
-  console.log('myMenu == ', myMenu);
 
   return (
     <Loading loading={loading} custom="custom-component-spin">
@@ -43,7 +43,7 @@ const MenuPrimary = ({
                 ) : (
                   <Link to={path.replace('$[{companyId}]', companyId || '_')}>
                     {icon}
-                    <span className="nav-text">{t(label)}</span>
+                    <span className="nav-text">{label}</span>
                   </Link>
                 )}
               </Tooltip>
@@ -55,7 +55,7 @@ const MenuPrimary = ({
                 title={(
                   <span>
                     {icon}
-                    <span>{t(label)}</span>
+                    <span>{label}</span>
                   </span>
                 )}
               >
@@ -70,7 +70,7 @@ const MenuPrimary = ({
                       ) : (
                         <Link to={x.path.replace('$[{companyId}]', companyId || '_')}>
                           {x.icon}
-                          <span className="nav-text">{t(x.label)}</span>
+                          <span className="nav-text">{x.label}</span>
                         </Link>
                       )}
                     </Tooltip>

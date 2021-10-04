@@ -31,16 +31,18 @@ const HeaderUser: React.FC<IHeaderUserProps> = ({ user, handleLogout, ...rest }:
     // eslint-disable-next-line
   }, [checkAuthentication]); // [checkAuthentication, unix]);
 
+  console.log('user = ', user, ' - d = ', user?.providerData[0].displayName);
+
   return (
     <Row gutter={8} justify="start">
-      <Col span={18}>
+      <Col span={20}>
         <Dropdown
           overlay={() => <UserMenu handleLogout={handleLogout} {...rest} />}
           placement="bottomRight"
         >
           <div className="custom-header-user">
             <Avatar icon={<UserOutlined />} />
-            <span>{user?.firstName}</span>
+            <span>{(user?.providerData && user?.providerData.length > 0) ? user?.providerData[0].displayName : ''}</span>
           </div>
         </Dropdown>
       </Col>

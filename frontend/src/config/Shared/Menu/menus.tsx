@@ -7,8 +7,9 @@ import { createMenu } from '../../../utils/common';
 const menus = () => ({
   header: [],
   primary: [
-    createMenu('Inicio', '/home/$[{companyId}]', <HomeOutlined className="custom-menu-icon" />, 'home', true),
-    createMenu('Ventas', '/profile/$[{companyId}]', <UserOutlined className="custom-menu-icon" />, 'profile', true),
+    createMenu('Inicio', '/home', <HomeOutlined className="custom-menu-icon" />, 'home', true),
+    // createMenu('Usuarios', '/users', <HomeOutlined className="custom-menu-icon" />, 'home', true),
+    createMenu('Ventas', '/sales', <UserOutlined className="custom-menu-icon" />, 'sales', true),
   ],
 });
 

@@ -44,8 +44,6 @@ const LayoutContainer: FC<RouteComponentProps<MatchParams>> = ({
     }
   }, [logged]);
 
-  console.log('logged == ', logged, ' loading == ', loading);
-
   const handleCollapse = () => setCollapsed(!collapse);
 
   return (
