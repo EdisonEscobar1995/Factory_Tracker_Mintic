@@ -1,13 +1,12 @@
 import { ILoginValues, IRol, IUser } from '../Interfaces/Login/login';
-import { createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, updateProfile, User, UserCredential } from "firebase/auth";
-import { setDoc, getFirestore, doc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, updateProfile, User, UserCredential } from "firebase/auth";
+import { setDoc, getFirestore, doc, getDoc } from "firebase/firestore";
+import { db, auth } from '../utils/firebaseConfig';
 
 // Metodo con mongo
 /* const login = (data: ILoginValues) => {
     return instance.post('login', data);
 }; */
-
-const auth = getAuth();
 
 const login = (credentials: ILoginValues) => {
   const { email, password } = credentials;
@@ -44,7 +43,7 @@ const register = (credentials: ILoginValues) => {
 }
 
 const updateDataUser = (user: User, displayName: string) => {
-  const db = getFirestore();
+  const db = getFirestore()  ;
   // collection(db, 'users').where("author", "==", user.uid).get()
   const rolesAux: IRol = {
     seller: true,
@@ -60,11 +59,35 @@ const updateDataUser = (user: User, displayName: string) => {
   // return setDoc(doc(db, `users/${user.uid}`, 'LA'), dataUser);
 };
 
+const getCurrentUser = async () => {
+  let userLogged = null;
+  const user = auth.currentUser;
+  if (user) {
+    let resultado = await getUser(user.uid);
+    userLogged = resultado;
+  }
+  return userLogged;
+};
+
+const getUser = async (uid: string) => {
+  const consulta = doc(db, 'users', uid);
+  let resultado = await getDoc(consulta);
+  return resultado.data();
+};
+
+/* const verifyLogin = () => {
+  const user = auth.currentUser;
+  console.log('user == ', user);
+  if (user) return true;
+  return false;
+}; */
 
 export {
   login,
   loginWithGoogle,
   updateDataUser,
   register,
+  getCurrentUser,
+  getUser,
   auth
 }

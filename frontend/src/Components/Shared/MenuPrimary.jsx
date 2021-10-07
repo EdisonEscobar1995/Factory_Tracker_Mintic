@@ -4,27 +4,32 @@ import { Menu, Tooltip } from 'antd';
 import Loading from './Loading';
 
 const MenuPrimary = ({
-  pathname, menus, globalScope, loading, Link
+  pathname, menus, data, loading, Link
 }) => {
-  const { companyId } = globalScope || {};
   const [myMenu, setMyMenu] = useState([]);
 
   console.log('pathname == ', pathname);
 
-  const getMenu = (dataMyMenu) => (dataMyMenu || []).map((menu) => {
-    menu.submenu = (menu.items || []).reduce((result, { key, ...rest }) => {
-      const find = (dataMyMenu || []).find(({ id }) => key === id);
-      if (find) return result.concat([{ ...find, ...rest, key }]);
-      return result;
-    }, []);
-    return menu;
+  const getMenu = (menus, dataMyMenu) => (menus || []).map((menu) => {
+    const dataMenu = (dataMyMenu || []).find(({ index }) => menu.key === index);
+    console.log('dataMenu == ', dataMenu);
+    console.log('menu == ', menu);
+    if (dataMenu) {
+      menu.submenu = (menu.items || []).reduce((result, { key, ...rest }) => {
+        const find = (menus || []).find(({ id }) => key === id);
+        if (find) return result.concat([{ ...find, ...rest, key }]);
+        return result;
+      }, []);
+      return menu;
+    }
+    return { ...menu, path: '' };
   });
 
   useEffect(() => {
-    if (menus) {
-      setMyMenu(getMenu(menus || []));
+    if (data) {
+      setMyMenu(getMenu(menus || [], data || []));
     }
-  }, [menus]);
+  }, [data]);
 
   return (
     <Loading loading={loading} custom="custom-component-spin">
@@ -36,12 +41,12 @@ const MenuPrimary = ({
             <Menu.Item key={key}>
               <Tooltip placement="right" title={description}>
                 {replace ? (
-                  <a href={path.replace('$[{companyId}]', companyId || '_')}>
+                  <a href={path}>
                     {icon}
                     <span className="nav-text">{label}</span>
                   </a>
                 ) : (
-                  <Link to={path.replace('$[{companyId}]', companyId || '_')}>
+                  <Link to={path}>
                     {icon}
                     <span className="nav-text">{label}</span>
                   </Link>
@@ -63,12 +68,12 @@ const MenuPrimary = ({
                   <Menu.Item key={x.key} className="custom-menu-item">
                     <Tooltip placement="right" title={x.description}>
                       {x.replace ? (
-                        <a href={x.path.replace('$[{companyId}]', companyId || '_')}>
+                        <a href={x.path}>
                           {x.icon}
                           <span className="nav-text">{x.label}</span>
                         </a>
                       ) : (
-                        <Link to={x.path.replace('$[{companyId}]', companyId || '_')}>
+                        <Link to={x.path}>
                           {x.icon}
                           <span className="nav-text">{x.label}</span>
                         </Link>
@@ -90,8 +95,7 @@ MenuPrimary.propTypes = {
   loading: PropTypes.bool,
   menus: PropTypes.array,
   pathname: PropTypes.string,
-  globalScope: PropTypes.object,
-  data: PropTypes.object,
+  data: PropTypes.array,
   Link: PropTypes.any,
 };
 

@@ -17,7 +17,7 @@ const useAuthentication = () => {
       setAuthentication({
         logged: true,
         loading: false,
-        user: JSON.parse(localStorage.getItem('user') || '')
+        user: JSON.parse(localStorage.getItem('user') || '{}')
       });
     }
   }, []);

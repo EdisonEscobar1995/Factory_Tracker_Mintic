@@ -26,6 +26,12 @@ const routes = [
   createRoutes({
     component: asyncFiles.sales,
     layout: true,
+    url: '/users',
+    target: 'users'
+  }),
+  createRoutes({
+    component: asyncFiles.sales,
+    layout: true,
     url: '/sales',
     target: 'sales'
   }),

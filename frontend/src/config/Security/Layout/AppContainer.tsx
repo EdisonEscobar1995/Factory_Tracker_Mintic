@@ -1,11 +1,7 @@
-import React from 'react';
 import antdLocales from './antdLocales';
 import App from './App';
-import { firebaseConfig } from '../../../utils/firebaseConfig'
 
-firebaseConfig();
-
-const AppContainer: React.FC = () => {
+const AppContainer = () => {
   return <App language={antdLocales('es')} />;
 };
 

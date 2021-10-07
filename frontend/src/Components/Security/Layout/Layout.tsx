@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { Layout as AntLayout, Col, Row } from 'antd';
 import User from './User';
 import Logo from '../../Shared/Logo';
@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import MenuPrimary from '../../Shared/MenuPrimary';
 import { pathTreatment } from '../../../utils/common';
 import { routes } from '../../../config/Security/Routes';
+import { IDataMenu } from '../../../Interfaces/menu';
+import { getMenus } from '../../../api/menu';
 
 interface ILayoutProps {
   path: string,
@@ -28,6 +30,20 @@ const Layout: React.FC<ILayoutProps> = ({
   children,
 }: ILayoutProps) => {
   const { innerHeight: height } = window;
+  const [loading, setLoading] = useState<boolean>(false);
+  const [dataMenu, setDataMenu] = useState<IDataMenu[] | [] | undefined>([]);
+
+  useEffect(() => {
+    const obtenerMenus = async () => {
+      setLoading(true);
+      const dataMenus = await getMenus(user);
+      console.log('res = ', dataMenus);
+      setDataMenu(dataMenus);
+      setLoading(false);
+    };
+    obtenerMenus();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const foundMenu = (pathname: string): string => {
     const route = routes.find(
@@ -39,6 +55,8 @@ const Layout: React.FC<ILayoutProps> = ({
     return '';
   };
 
+  console.log('path = ', path);
+  
   return (
     <AntLayout className="custom-layout">
       <AntLayout.Header className="custom-header">
@@ -46,7 +64,7 @@ const Layout: React.FC<ILayoutProps> = ({
           <Col span={4}>
             <Logo />
           </Col>
-          <Col offset={15} span={3}>
+          <Col offset={15} span={4}>
             <User user={user} />
           </Col>
         </Row>
@@ -63,8 +81,8 @@ const Layout: React.FC<ILayoutProps> = ({
               Link={Link}
               pathname={path && foundMenu(path)}
               menus={menus}
-              // data={data}
-              // loading={loading}
+              data={dataMenu}
+              loading={loading}
             />
           </AntLayout.Sider>
           <AntLayout.Content style={{ height: `${height - 70}px` }} className="custom-content">
