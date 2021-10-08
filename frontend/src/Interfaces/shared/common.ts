@@ -27,6 +27,7 @@ export interface IMessageProps {
   type: string;
   text: string;
   title?: string;
+  duration?: number;
 }
 
 export interface ITitleProps {

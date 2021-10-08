@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Modal } from 'antd';
 import { IMessageProps } from '../../Interfaces/shared/common';
 
-const message: FC<IMessageProps> = ({ type = 'info', title = '', text = ''}: IMessageProps) => {
+const message: FC<IMessageProps> = ({ type = 'info', title = '', text = '', duration = 5000 }: IMessageProps) => {
   let modal: any;
   const config = {
     title,
@@ -24,7 +24,7 @@ const message: FC<IMessageProps> = ({ type = 'info', title = '', text = ''}: IMe
       break;
   }
 
-  setTimeout(() => modal.destroy(), 5000);
+  setTimeout(() => modal.destroy(), duration);
   return null;
 };
 

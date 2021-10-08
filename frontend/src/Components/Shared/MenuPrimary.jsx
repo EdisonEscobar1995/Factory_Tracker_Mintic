@@ -12,8 +12,6 @@ const MenuPrimary = ({
 
   const getMenu = (menus, dataMyMenu) => (menus || []).map((menu) => {
     const dataMenu = (dataMyMenu || []).find(({ index }) => menu.key === index);
-    console.log('dataMenu == ', dataMenu);
-    console.log('menu == ', menu);
     if (dataMenu) {
       menu.submenu = (menu.items || []).reduce((result, { key, ...rest }) => {
         const find = (menus || []).find(({ id }) => key === id);

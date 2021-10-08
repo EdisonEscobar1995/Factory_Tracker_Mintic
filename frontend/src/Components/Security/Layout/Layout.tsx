@@ -37,7 +37,6 @@ const Layout: React.FC<ILayoutProps> = ({
     const obtenerMenus = async () => {
       setLoading(true);
       const dataMenus = await getMenus(user);
-      console.log('res = ', dataMenus);
       setDataMenu(dataMenus);
       setLoading(false);
     };
@@ -54,8 +53,6 @@ const Layout: React.FC<ILayoutProps> = ({
     }
     return '';
   };
-
-  console.log('path = ', path);
   
   return (
     <AntLayout className="custom-layout">

@@ -2,6 +2,7 @@ import { ILoginValues, IRol, IUser } from '../Interfaces/Login/login';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, updateProfile, User, UserCredential } from "firebase/auth";
 import { setDoc, getFirestore, doc, getDoc } from "firebase/firestore";
 import { db, auth } from '../utils/firebaseConfig';
+import { getUserById } from './user';
 
 // Metodo con mongo
 /* const login = (data: ILoginValues) => {
@@ -43,8 +44,6 @@ const register = (credentials: ILoginValues) => {
 }
 
 const updateDataUser = (user: User, displayName: string) => {
-  const db = getFirestore()  ;
-  // collection(db, 'users').where("author", "==", user.uid).get()
   const rolesAux: IRol = {
     seller: true,
   };
@@ -63,16 +62,10 @@ const getCurrentUser = async () => {
   let userLogged = null;
   const user = auth.currentUser;
   if (user) {
-    let resultado = await getUser(user.uid);
+    let resultado = await getUserById(user.uid);
     userLogged = resultado;
   }
   return userLogged;
-};
-
-const getUser = async (uid: string) => {
-  const consulta = doc(db, 'users', uid);
-  let resultado = await getDoc(consulta);
-  return resultado.data();
 };
 
 /* const verifyLogin = () => {
@@ -88,6 +81,5 @@ export {
   updateDataUser,
   register,
   getCurrentUser,
-  getUser,
   auth
 }
