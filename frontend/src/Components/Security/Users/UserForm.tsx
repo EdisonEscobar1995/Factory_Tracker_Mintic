@@ -53,7 +53,6 @@ const UserForm: React.FC<IUserFormProps> = ({
   };
 
   const handleClose = () => {
-    console.log('handleClose');
     form.resetFields();
   };
 

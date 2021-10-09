@@ -12,6 +12,7 @@ interface IRoutesProps {
 const Routes: FC<IRoutesProps> = ({
   routes, user, toRedirect, setAuthentication
 }: IRoutesProps) => {
+
   return (
     <Switch>
       {routes.map(({ component, exact, path }, index) => (

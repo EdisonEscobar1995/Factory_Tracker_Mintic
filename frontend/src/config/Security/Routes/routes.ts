@@ -42,6 +42,18 @@ const routes = [
     target: 'sales'
   }),
   createRoutes({
+    component: asyncFiles.products,
+    layout: true,
+    url: '/products',
+    target: 'products'
+  }),
+  createRoutes({
+    component: asyncFiles.registerProduct,
+    layout: true,
+    url: '/product/:id?',
+    target: 'products'
+  }),
+  createRoutes({
     component: asyncFiles.notFound,
     layout: true,
     url: undefined,

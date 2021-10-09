@@ -34,3 +34,7 @@ export const pathTreatment = (path: string): string => {
   }
   return '';
 };
+
+export const ordenarLista = (list: any, field: string) => {
+  return list.sort((a: any, b: any) => (a[field] > b[field]) ? 1 : -1);
+};

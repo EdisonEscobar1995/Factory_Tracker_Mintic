@@ -3,36 +3,36 @@ import { Button, Col, Row } from 'antd';
 import { UsergroupDeleteOutlined } from '@ant-design/icons';
 import { Container } from '../../Components/Shared';
 import Title from '../../Components/Shared/Title';
-import { UserForm, UsersList } from '../../Components/Security/Users';
-import { IUserDbProps, IUsersProps } from '../../Interfaces/Login/user';
-import { getUsers, updateUser } from '../../api/user';
-import { register, updateDataUser } from '../../api/login';
-import { updateProfile } from 'firebase/auth';
 import message from '../../Components/Shared/message';
+import { IProduct, IProductsProps } from '../../Interfaces/product';
+import { getProducts, updateProduct } from '../../api/product';
+import { ProductsList } from '../../Components/Products';
 import { ordenarLista } from '../../utils/common';
 
-const Users: React.FC<IUsersProps> = ({ history }: IUsersProps) => {
+const Products: React.FC<IProductsProps> = ({ history }: IProductsProps) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [edit, setEdit] = useState<boolean>(false);
-  const [data, setData] = useState<IUserDbProps[] | []>([]);
-  const [userEdit, setUserEdit] = useState<IUserDbProps | undefined>();
+  const [data, setData] = useState<IProduct[] | []>([]);
+  // const [userEdit, setUserEdit] = useState<IUserDbProps | undefined>();
 
   useEffect(() => {
-    const loadUsers = async () => {
+    const loadProducts = async () => {
       try {
-        const response = await getUsers();
-        setData(ordenarLista(response, 'displayName'));
+        const response = await getProducts();
+        console.log('response = ', response);
+        // await updateProduct('DkIQeZCJYHuU9MaR8hI0');
+        setData(ordenarLista(response, 'descripcion'));
         setLoading(false);
       } catch (error) {
         console.error(error);
         setLoading(false);
       }
     };
-    loadUsers();
+    loadProducts();
   }, []);
 
-  const handleCreate = async (values: any, setLoadingForm: Function) => {
+  /* const handleCreate = async (values: any, setLoadingForm: Function) => {
     try {
       setLoadingForm(true);
       const { email, password, name, lastName, roles } = values;
@@ -52,7 +52,7 @@ const Users: React.FC<IUsersProps> = ({ history }: IUsersProps) => {
         email,
         roles: rolesAux
       }];
-      setData(ordenarLista(dataAux, 'displayName'));
+      setData(ordenarLista(dataAux));
       setLoadingForm(false);
       handleCancel();
       message({ type: 'succes', text: 'Usuario creado con éxito!', duration: 10000 });
@@ -97,13 +97,12 @@ const Users: React.FC<IUsersProps> = ({ history }: IUsersProps) => {
     setVisible(true);
     setEdit(true);
     setUserEdit(record);
-  };
+  }; */
 
   return (
     <Container>
       <div className="custom-sales-container">
-        <Title icon={<UsergroupDeleteOutlined />} title='Usuarios' />
-        <p className="custom-legend">Usuarios del sistema</p>
+        <Title icon={<UsergroupDeleteOutlined />} title='Productos' />
         <Row
           className="custom-buttons-container"
           gutter={8}
@@ -114,19 +113,19 @@ const Users: React.FC<IUsersProps> = ({ history }: IUsersProps) => {
               htmlType="submit"
               type="primary"
               className="custom-full-width"
-              onClick={handleView}
+              onClick={() => history.push('/product')}
               disabled={false}
             >
-              Crear usuario
+              Crear producto
             </Button>
           </Col>
         </Row>
-        <UsersList
+        <ProductsList
           dataRequests={data || []}
           loadingRequests={loading}
-          handleShowEdit={handleShowEdit}
+          // handleShowEdit={handleShowEdit}
         />
-        <UserForm
+        {/* <UserForm
           visible={visible}
           title={edit ? 'Editar usuario' : 'Crear usuario'}
           handleCreate={handleCreate}
@@ -134,10 +133,10 @@ const Users: React.FC<IUsersProps> = ({ history }: IUsersProps) => {
           handleEditUser={handleEditUser}
           user={userEdit}
           isEdit={edit}
-        />
+        /> */}
       </div>
     </Container>
   );
 };
 
-export default Users;
+export default Products;

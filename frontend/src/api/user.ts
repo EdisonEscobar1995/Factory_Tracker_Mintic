@@ -9,7 +9,7 @@ const getUsers = async () => {
   let resultado = await getDocs(consulta);
   if (resultado && resultado.docs.length > 0) {
     resultado.docs.forEach(documento => {
-      console.log('documento = ', documento.data());
+      // console.log('documento = ', documento.data());
       response.push({
         displayName: documento.data().displayName,
         email: documento.data().email,

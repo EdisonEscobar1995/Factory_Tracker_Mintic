@@ -1,6 +1,6 @@
 import { ILoginValues, IRol, IUser } from '../Interfaces/Login/login';
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, updateProfile, User, UserCredential } from "firebase/auth";
-import { setDoc, getFirestore, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import { db, auth } from '../utils/firebaseConfig';
 import { getUserById } from './user';
 
