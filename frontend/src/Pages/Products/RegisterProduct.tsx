@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { uuid } from 'uuidv4';
+import { updateProduct } from '../../api/product';
 import ProductForm from '../../Components/Products/ProductForm';
 import { Container, Loading } from '../../Components/Shared';
 import message from '../../Components/Shared/message';
@@ -28,6 +30,24 @@ const RegisterProduct: React.FC<IRegisterProductProps> = ({ history, match }: IR
     }
   }, [id]);
 
+  const handleCreate = async (product: IProduct) => {
+    try {
+      setLoading(true);
+      let uid = uuid();
+      if (id) {
+        uid = id;
+      }
+      await updateProduct(product, uid);
+      message({ type: 'succes', text: 'Producto creado con éxito!', duration: 8000 });
+      setLoading(false);
+      history.push('/products');
+    } catch (error) {
+      console.log('error = ', error);
+      message({ type: 'error', text: 'Error creando el producto!', duration: 8000 });
+      setLoading(false);
+    }
+  };
+
   const handleCancel = () => {
     history.push('/products');
   };
@@ -41,6 +61,7 @@ const RegisterProduct: React.FC<IRegisterProductProps> = ({ history, match }: IR
             id={currentProduct ? id : undefined}
             product={currentProduct}
             handleCancel={handleCancel}
+            handleCreate={handleCreate}
           />
         </div>
       </Loading>

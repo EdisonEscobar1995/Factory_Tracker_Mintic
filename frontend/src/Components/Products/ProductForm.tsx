@@ -5,7 +5,8 @@ import { IProductFormProps } from '../../Interfaces/product';
 const ProductForm: React.FC<IProductFormProps> = ({
   id,
   product,
-  handleCancel
+  handleCancel,
+  handleCreate
 }: IProductFormProps) => {
 
   const [form] = Form.useForm();
@@ -24,10 +25,11 @@ const ProductForm: React.FC<IProductFormProps> = ({
 
   const onSubmit = () => {
     form.validateFields().then(async (values) => {
+      console.log('values == ', values);
       if (id && product) {
         // editar
       } else {
-        // handleSubmit(input, setLoading);
+        handleCreate(values);
       }
     });
   };

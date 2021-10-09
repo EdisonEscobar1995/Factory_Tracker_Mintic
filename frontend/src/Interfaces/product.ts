@@ -19,4 +19,5 @@ export interface IProductFormProps {
   id?: string;
   product?: IProduct;
   handleCancel: React.MouseEventHandler<HTMLElement> | undefined;
+  handleCreate: Function;
 }

@@ -29,18 +29,12 @@ const getProductById = async (uid: string) => {
   return resultado.data();
 };
 
-// const updateProduct = async (product: IProduct) => {
-  const updateProduct = async (uid: string) => {
-  if (uid) {
-    const dataUser: IProduct = {
-      descripcion: 'Camiseta editada otra',
-      estado:true,
-      valorUnitario: 21000
-    };
+const updateProduct = async (product: IProduct, uid: string) => {
+  // if (uid) {
     let referencia = doc(db, 'products', uid);
-    return setDoc(referencia, dataUser);
-  }
-  return false;
+    return setDoc(referencia, product);
+  // }
+  // return false;
 };
 
 export {
