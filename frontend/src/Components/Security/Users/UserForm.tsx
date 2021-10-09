@@ -8,8 +8,10 @@ interface IUserFormProps {
   visible: boolean;
   title: string;
   handleCreate: Function;
+  handleEditUser: Function;
   handleCancel: React.MouseEventHandler<HTMLElement> | undefined;
   user?: IUserDbProps | undefined;
+  isEdit: boolean;
 }
 
 const UserForm: React.FC<IUserFormProps> = ({
@@ -17,7 +19,9 @@ const UserForm: React.FC<IUserFormProps> = ({
   title,
   handleCreate,
   handleCancel,
-  user
+  handleEditUser,
+  user,
+  isEdit
 }: IUserFormProps) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,11 +40,20 @@ const UserForm: React.FC<IUserFormProps> = ({
 
   const onOk = () => {
     form.validateFields().then((values) => {
-      handleCreate(values, setLoading);
+      if (isEdit) {
+        const rolesAux: any = {};
+        (values.roles || []).forEach((key: string) => {
+          rolesAux[key] = true;
+        });
+        handleEditUser({ ...user, displayName: values.name, roles: rolesAux }, setLoading);
+      } else {
+        handleCreate(values, setLoading);
+      }
     });
   };
 
-  const handleCose = () => {
+  const handleClose = () => {
+    console.log('handleClose');
     form.resetFields();
   };
 
@@ -65,7 +78,7 @@ const UserForm: React.FC<IUserFormProps> = ({
       cancelText="Cancelar"
       onCancel={handleCancel}
       onOk={onOk}
-      afterClose={handleCose}
+      afterClose={handleClose}
       closable={false}
       maskClosable={false}
       width="70%"
@@ -87,6 +100,7 @@ const UserForm: React.FC<IUserFormProps> = ({
               placeholder="Correo"
               maxLength={100}
               prefix={<UserOutlined />}
+              disabled={isEdit}
             />
           </Form.Item>
           <Form.Item
@@ -102,27 +116,31 @@ const UserForm: React.FC<IUserFormProps> = ({
               maxLength={100}
             />
           </Form.Item>
-          <Form.Item
-            label="Apellido"
-            name="lastName"
-            {...formLayout}
-          >
-            <Input
-              placeholder="Apellido"
-              maxLength={100}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Contraseña"
-            name="password"
-            rules={[{ message: '¡Contraseña requerida!', required: true }]}
-            {...formLayout}
-          >
-            <Input.Password
-              placeholder="Contraseña"
-              prefix={<LockOutlined />}
-            />
-          </Form.Item>
+          {!isEdit && (
+            <>
+              <Form.Item
+                label="Apellido"
+                name="lastName"
+                {...formLayout}
+              >
+                <Input
+                  placeholder="Apellido"
+                  maxLength={100}
+                />
+              </Form.Item>
+              <Form.Item
+                label="Contraseña"
+                name="password"
+                rules={[{ message: '¡Contraseña requerida!', required: true }]}
+                {...formLayout}
+              >
+                <Input.Password
+                  placeholder="Contraseña"
+                  prefix={<LockOutlined />}
+                />
+              </Form.Item>
+            </>
+          )}
           <Form.Item
             label="Roles"
             name="roles"

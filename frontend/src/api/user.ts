@@ -1,5 +1,5 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
-import { deleteUser } from "firebase/auth";
+import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { IUser } from "../Interfaces/Login/login";
 import { IUserDbProps } from "../Interfaces/Login/user";
 import { db } from "../utils/firebaseConfig";
 
@@ -9,12 +9,13 @@ const getUsers = async () => {
   let resultado = await getDocs(consulta);
   if (resultado && resultado.docs.length > 0) {
     resultado.docs.forEach(documento => {
-      console.log('documento.data() == ', documento.data());
+      console.log('documento = ', documento.data());
       response.push({
         displayName: documento.data().displayName,
         email: documento.data().email,
-        roles: documento.data().rol,
-        id: documento.data().id
+        roles: documento.data().roles,
+        id: documento.data().id,
+        superadmin: documento.data().superadmin || false,
       });
     })
   }
@@ -27,11 +28,23 @@ const getUserById = async (uid: string) => {
   return resultado.data();
 };
 
-const updateUser = async () => {
-  
+const updateUser = async (user: IUserDbProps) => {
+  const { id, email, displayName, roles } = user;
+  if (id) {
+    const dataUser: IUser = {
+      id,
+      email,
+      displayName,
+      roles
+    };
+    let referencia = doc(db, 'users', id);
+    return setDoc(referencia, dataUser);
+  }
+  return false;
 };
 
 export {
   getUsers,
-  getUserById
+  getUserById,
+  updateUser
 }

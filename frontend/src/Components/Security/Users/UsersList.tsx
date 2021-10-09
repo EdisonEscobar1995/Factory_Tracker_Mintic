@@ -1,6 +1,7 @@
 import React from 'react';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined } from '@ant-design/icons';
 import { ActionButton, Loading, Table } from '../../Shared';
+import { receiveMessageOnPort } from 'worker_threads';
 
 const columns = {
   name: 'Nombre',
@@ -11,12 +12,14 @@ interface IUsersListProps {
   loadingRequests?: boolean,
   dataRequests: any,
   handleRequestsTable?: Function,
+  handleShowEdit: Function,
 }
 
 const UsersList: React.FC<IUsersListProps> = ({
   dataRequests,
   loadingRequests = false,
   handleRequestsTable,
+  handleShowEdit
 }: IUsersListProps) => {
   
   const renders = [
@@ -37,29 +40,16 @@ const UsersList: React.FC<IUsersListProps> = ({
           handleTable={handleRequestsTable}
           widthActions={200}
           actions={[
-            ({ record }: any) => (
+            ({ record }: any) => !record.superadmin && (
               <ActionButton
                 key='edit'
                 icon={<EditOutlined />}
                 type='primary'
                 text='Editar usuario'
                 // handleClick={() => handleView(record.id)}
-                handleClick={() => {}}
+                handleClick={() => handleShowEdit(record)}
               />
-            ),
-            ({ record }: any) => (
-              <ActionButton
-                key='delete'
-                icon={<DeleteOutlined />}
-                type='primary'
-                danger
-                text='Eliminar usuario'
-                confirm
-                confirmText='¿Está seguro que desea eliminar este usuario?'
-                // handleClick={() => { handleFinishIntegration(record.id); }}
-                handleClick={() => {}}
-              />
-            ),
+            )
           ]}
         />
       </Loading>

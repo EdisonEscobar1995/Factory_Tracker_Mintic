@@ -16,4 +16,5 @@ export interface IUserDbProps {
   displayName: string;
   email: string;
   roles: IRol;
+  superadmin?: boolean;
 }
