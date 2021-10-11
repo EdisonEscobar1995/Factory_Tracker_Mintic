@@ -3,6 +3,7 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ActionButton, Loading, Table } from '../Shared';
 
 const columns = {
+  codigo: 'Código',
   descripcion: 'Descripción',
   valorUnitario: 'Valor unitario',
   estado: 'Estado'
@@ -12,20 +13,22 @@ interface IProductsListProps {
   loadingRequests?: boolean,
   dataRequests: any,
   handleRequestsTable?: Function,
-  handleShowEdit?: Function,
+  handleDelete: Function,
+  handleShowEdit: Function,
 }
 
 const ProductsList: React.FC<IProductsListProps> = ({
   dataRequests,
   loadingRequests = false,
   handleRequestsTable,
+  handleDelete,
   handleShowEdit
 }: IProductsListProps) => {
   
   const renders = [
     {
       key: 'estado',
-      render: (text: string, { estado }: any) => estado ? 'Disponible' : 'No Disponible',
+      render: (text: string, { estado }: any) => estado === 1 ? 'Disponible' : 'No Disponible',
     }
   ];
 
@@ -46,8 +49,7 @@ const ProductsList: React.FC<IProductsListProps> = ({
                 icon={<EditOutlined />}
                 type='primary'
                 text='Editar producto'
-                handleClick={() => {}}
-                // handleClick={() => handleShowEdit(record)}
+                handleClick={() => handleShowEdit(record)}
               />
             ),
             ({ record }: any) => !record.superadmin && (
@@ -59,7 +61,7 @@ const ProductsList: React.FC<IProductsListProps> = ({
                 text='Eliminar producto'
                 confirm
                 confirmText='¿Está seguro que desea eliminar este producto?'
-                handleClick={() => {}}
+                handleClick={() => handleDelete(record)}
                 // handleClick={() => handleShowEdit(record)}
               />
             )

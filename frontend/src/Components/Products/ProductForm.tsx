@@ -12,25 +12,18 @@ const ProductForm: React.FC<IProductFormProps> = ({
   const [form] = Form.useForm();
 
   useEffect(() => {
-    let estado = 0;
-    if (product?.estado) {
-      estado = 1;
-    }
     form.setFieldsValue({
+      codigo: product?.codigo || '',
       descripcion: product?.descripcion || '',
       valorUnitario: product?.valorUnitario || '',
-      estado
+      estado: product?.estado || ''
     });
-  }, []);
+  }, [product]);
 
   const onSubmit = () => {
     form.validateFields().then(async (values) => {
       console.log('values == ', values);
-      if (id && product) {
-        // editar
-      } else {
-        handleCreate(values);
-      }
+      handleCreate(values);
     });
   };
 
@@ -52,6 +45,20 @@ const ProductForm: React.FC<IProductFormProps> = ({
       <Row gutter={8}>
         <Col span={12}>
           <Form.Item
+            label="Código"
+            name="codigo"
+            rules={[{ required: true, message: '¡Campo requerido!' }]}
+            {...formFullLayout}
+          >
+            <InputNumber
+              style={{ width: '90%' }}
+              min={0}
+              maxLength={25}
+            />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
             label="Descripción"
             name="descripcion"
             rules={[{ required: true, message: '¡Campo requerido!' }]}
@@ -62,6 +69,8 @@ const ProductForm: React.FC<IProductFormProps> = ({
             />
           </Form.Item>
         </Col>
+      </Row>
+      <Row gutter={8}>
         <Col span={12}>
           <Form.Item
             label="Valor unitario"
@@ -75,8 +84,6 @@ const ProductForm: React.FC<IProductFormProps> = ({
             />
           </Form.Item>
         </Col>
-      </Row>
-      <Row gutter={8}>
         <Col span={12}>
           <Form.Item
             label="Estado"
@@ -84,7 +91,7 @@ const ProductForm: React.FC<IProductFormProps> = ({
             rules={[{ required: true, message: '¡Campo requerido!' }]}
             {...formFullLayout}
           >
-           <Select
+            <Select
               optionFilterProp="children"
             >
               {estados.map((x, i) => (

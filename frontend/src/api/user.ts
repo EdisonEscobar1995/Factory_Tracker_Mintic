@@ -23,9 +23,13 @@ const getUsers = async () => {
 };
 
 const getUserById = async (uid: string) => {
-  const consulta = doc(db, 'users', uid);
-  let resultado = await getDoc(consulta);
-  return resultado.data();
+  try {
+    const consulta = doc(db, 'users', uid);
+    let resultado = await getDoc(consulta);
+    return resultado.data(); 
+  } catch (error) {
+    console.log('Error = ', error);
+  }
 };
 
 const updateUser = async (user: IUserDbProps) => {

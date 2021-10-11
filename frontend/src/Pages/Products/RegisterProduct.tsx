@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { uuid } from 'uuidv4';
-import { updateProduct } from '../../api/product';
+import { getProductById, updateProduct } from '../../api/product';
 import ProductForm from '../../Components/Products/ProductForm';
 import { Container, Loading } from '../../Components/Shared';
 import message from '../../Components/Shared/message';
@@ -13,11 +13,21 @@ const RegisterProduct: React.FC<IRegisterProductProps> = ({ history, match }: IR
   const [loading, setLoading] = useState<boolean>(false);
 
   const { id } = match.params;
-  console.log('id = ', id);
 
   useEffect(() => {
     const getProduct = async () => {
       try {
+        const product = await getProductById(id || '');
+        if (product) {
+          const { codigo, descripcion, valorUnitario, estado } = product;
+          setCurrentProduct({
+            id,
+            estado,
+            descripcion,
+            valorUnitario,
+            codigo
+          });
+        }
         setLoading(false);
       } catch (error) {
         console.error(error);
@@ -34,11 +44,13 @@ const RegisterProduct: React.FC<IRegisterProductProps> = ({ history, match }: IR
     try {
       setLoading(true);
       let uid = uuid();
-      if (id) {
+      let mensaje = 'Producto creado con éxito!';
+      if (id && currentProduct) {
         uid = id;
+        mensaje = 'Producto actualizado con éxito!';
       }
       await updateProduct(product, uid);
-      message({ type: 'succes', text: 'Producto creado con éxito!', duration: 8000 });
+      message({ type: 'succes', text: mensaje, duration: 8000 });
       setLoading(false);
       history.push('/products');
     } catch (error) {

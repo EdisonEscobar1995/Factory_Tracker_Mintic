@@ -11,6 +11,12 @@ export interface IUsersProps extends RouteComponentProps<MatchParams> {
   user?: any,
 }
 
+export interface IHeaderUserProps extends RouteComponentProps<MatchParams> {
+  user?: any,
+  handleLogout: any,
+  [rest: string]: any
+}
+
 export interface IUserDbProps {
   id?: string;
   displayName: string;

@@ -10,8 +10,9 @@ export interface IRegisterProductProps extends RouteComponentProps<MatchParams> 
 
 export interface IProduct {
   id?: string;
+  codigo: number;
   descripcion: string;
-  estado: boolean | number;
+  estado: number;
   valorUnitario: number;
 }
 

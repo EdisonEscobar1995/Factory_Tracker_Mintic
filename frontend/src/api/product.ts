@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { IProduct } from "../Interfaces/product";
 import { db } from "../utils/firebaseConfig";
 
@@ -8,10 +8,9 @@ const getProducts = async () => {
   let resultado = await getDocs(consulta);
   if (resultado && resultado.docs.length > 0) {
     resultado.docs.forEach(documento => {
-      console.log('proudcto.id = ', documento.id);
-      console.log('proudcto = ', documento.data());
       response.push({
         id: documento.id,
+        codigo: documento.data().codigo,
         descripcion: documento.data().descripcion,
         valorUnitario: documento.data().valorUnitario,
         estado: documento.data().estado
@@ -22,11 +21,15 @@ const getProducts = async () => {
 };
 
 const getProductById = async (uid: string) => {
-  const consulta = doc(db, 'users', uid);
-  let resultado = await getDoc(consulta);
-  console.log('producto == ', resultado);
-  console.log('producto.data == ', resultado.data());
-  return resultado.data();
+  let response = null;
+  if (uid) {
+    const consulta = doc(db, 'products', uid);
+    let resultado = await getDoc(consulta);
+    if (resultado) {
+      response = resultado.data();
+    }
+  }
+  return response;
 };
 
 const updateProduct = async (product: IProduct, uid: string) => {
@@ -37,8 +40,14 @@ const updateProduct = async (product: IProduct, uid: string) => {
   // return false;
 };
 
+const deleteProduct = async (uid: string) => {
+  let referencia = doc(db, 'products', uid);
+  return deleteDoc(referencia);
+};
+
 export {
   getProductById,
   getProducts,
-  updateProduct
+  updateProduct,
+  deleteProduct
 };
