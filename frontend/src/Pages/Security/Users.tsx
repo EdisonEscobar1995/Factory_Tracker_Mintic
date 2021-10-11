@@ -10,6 +10,7 @@ import { register, updateDataUser } from '../../api/login';
 import { updateProfile } from 'firebase/auth';
 import message from '../../Components/Shared/message';
 import { ordenarLista } from '../../utils/common';
+import { getErrors } from '../../utils/errors';
 
 const Users: React.FC<IUsersProps> = ({ history }: IUsersProps) => {
   const [visible, setVisible] = useState<boolean>(false);
@@ -56,8 +57,15 @@ const Users: React.FC<IUsersProps> = ({ history }: IUsersProps) => {
       setLoadingForm(false);
       handleCancel();
       message({ type: 'succes', text: 'Usuario creado con éxito!', duration: 10000 });
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      console.log('Error = ', error);
+      let mensaje = 'Error creando el usuario!';
+      let title = '';
+      if (error.code) {
+        mensaje = getErrors(error.code);
+        title = 'Error';
+      }
+      message({ title, type: 'error', text: mensaje, duration: 8000 });
       setLoadingForm(false);
     }
   };
