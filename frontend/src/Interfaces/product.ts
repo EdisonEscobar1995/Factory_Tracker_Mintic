@@ -22,3 +22,8 @@ export interface IProductFormProps {
   handleCancel: React.MouseEventHandler<HTMLElement> | undefined;
   handleCreate: Function;
 }
+
+export interface IFilterProductsProps {
+  setFilters: Function;
+  filters: any;
+}

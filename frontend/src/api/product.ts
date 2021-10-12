@@ -1,4 +1,4 @@
-import { collection, deleteDoc, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, endAt, getDoc, getDocs, query, setDoc, startAt, where } from "firebase/firestore";
 import { IProduct } from "../Interfaces/product";
 import { db } from "../utils/firebaseConfig";
 
@@ -34,8 +34,8 @@ const getProductById = async (uid: string) => {
 
 const updateProduct = async (product: IProduct, uid: string) => {
   // if (uid) {
-    let referencia = doc(db, 'products', uid);
-    return setDoc(referencia, product);
+  let referencia = doc(db, 'products', uid);
+  return setDoc(referencia, product);
   // }
   // return false;
 };
@@ -44,6 +44,19 @@ const deleteProduct = async (uid: string) => {
   let referencia = doc(db, 'products', uid);
   return deleteDoc(referencia);
 };
+
+/* const searchProduct = async (codigo?: string, descripcion?: string) => {
+
+  const q2 = query(collection(db, "products"), where('descripcion', '>=', 'producto')
+  , where('descripcion', '<=', 'producto'));
+  const res = await getDocs(q2);
+  console.log('res == ', res.docs);
+  if (res.docs.length > 0) {
+    res.docs.forEach(element => {
+      console.log('element = ', element.data());
+    });
+  }
+}; */
 
 export {
   getProductById,
