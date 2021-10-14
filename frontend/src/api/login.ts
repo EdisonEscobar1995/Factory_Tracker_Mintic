@@ -22,7 +22,7 @@ const loginWithGoogle = async (setAuthentication: Function, setLoading: Function
     const token = credential?.accessToken;
     const user = result.user;
     if (token) {
-      updateDataUser(user, '');
+      await updateDataUser(user, '');
       const { providerData, uid, email } = user;
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify({ providerData, uid, email }));
@@ -43,18 +43,26 @@ const register = (credentials: ILoginValues) => {
   return createUserWithEmailAndPassword(auth, email, password);
 }
 
-const updateDataUser = (user: User, displayName: string) => {
-  const rolesAux: IRol = {
-    seller: true,
-  };
-  const dataUser: IUser = {
-    id: user.uid,
-    email: user.email,
-    displayName: user.displayName ? user.displayName : displayName,
-    roles: rolesAux
-  };
-  let referencia = doc(db, 'users', user.uid);
-  return setDoc(referencia, dataUser);
+const updateDataUser = async (user: User, displayName: string) => {
+  try {
+    let rolesAux: IRol = {
+      seller: true,
+    };
+    let userDb = await getUserById(user.uid);
+    if (userDb) {
+      rolesAux = userDb.roles;
+    }
+    const dataUser: IUser = {
+      id: user.uid,
+      email: user.email,
+      displayName: user.displayName ? user.displayName : displayName,
+      roles: rolesAux
+    };
+    let referencia = doc(db, 'users', user.uid);
+    return setDoc(referencia, dataUser);
+  } catch (error) {
+      
+  }
   // return setDoc(doc(db, `users/${user.uid}`, 'LA'), dataUser);
 };
 

@@ -8,3 +8,13 @@ export interface ISalesProps extends RouteComponentProps<MatchParams> {
 
 export interface IRegisterSaleProps extends RouteComponentProps<MatchParams> {
 }
+
+export interface ISale {
+  id?: string;
+  estado: number;
+  fechaVenta: any;
+  idCliente: string;
+  nombreCliente: string;
+  valorTotal: number;
+  productos: any[];
+}

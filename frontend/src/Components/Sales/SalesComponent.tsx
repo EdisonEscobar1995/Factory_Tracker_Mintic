@@ -4,54 +4,47 @@ import {
   Button, Col, Row
 } from 'antd';
 import SalesList from './SalesList';
-import { Container } from '../Shared';
+import { Container, Loading } from '../Shared';
 import Title from '../Shared/Title';
+import { ISale } from '../../Interfaces/Sale/sale';
 
-interface ISalesProps {
+interface ISalesComponentProps {
   sale?: any;
+  dataSales: ISale[] | [];
+  loadingRequests: boolean;
   handleSubmit?: any;
   handleCreate?: React.MouseEventHandler<HTMLElement> | undefined;
 }
 
-const SalesComponent: React.FC<ISalesProps> = ({ sale, handleSubmit, handleCreate }: ISalesProps) => {
+const SalesComponent: React.FC<ISalesComponentProps> = ({ sale, dataSales, loadingRequests, handleSubmit, handleCreate }: ISalesComponentProps) => {
 
   return (
     <Container>
       <div className="custom-sales-container">
         <Title icon={<AppstoreAddOutlined />} title='Ventas' />
         <p className="custom-legend">Registro de ventas realizadas</p>
-        <Row
-          className="custom-buttons-container"
-          gutter={8}
-          justify="end"
-        >
-          <Col span={7}>
-            <Button
-              htmlType="submit"
-              type="primary"
-              className="custom-full-width"
-              onClick={handleCreate}
-              disabled={false}
-            >
-              Registrar venta
-            </Button>
-          </Col>
-        </Row>
-        <SalesList
-          dataRequests={[]}
-        />
-        {/* <IntegrationForm
-          visible={visible}
-          handleCancel={handleCancel}
-          handleSubmit={handleSubmit}
-          searchRspp={searchRspp}
-          rspp={rspp}
-          lists={lists}
-          rsppView={rsppView}
-          loading={loading}
-          setLoading={setLoading}
-          setFiltersRspp={setFiltersRspp}
-        /> */}
+        <Loading loading={loadingRequests} custom='custom-component-spin'>
+          <Row
+            className="custom-buttons-container"
+            gutter={8}
+            justify="end"
+          >
+            <Col span={7}>
+              <Button
+                htmlType="submit"
+                type="primary"
+                className="custom-full-width"
+                onClick={handleCreate}
+                disabled={false}
+              >
+                Registrar venta
+              </Button>
+            </Col>
+          </Row>
+          <SalesList
+            dataRequests={dataSales}
+          />
+        </Loading>
       </div>
     </Container>
   );

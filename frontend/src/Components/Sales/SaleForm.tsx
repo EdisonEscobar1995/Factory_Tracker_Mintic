@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
-import { Button, Col, DatePicker, Form, Input, InputNumber, Row } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Col, DatePicker, Form, Input, InputNumber, Row, Select } from 'antd';
 import { PlusOutlined, EditOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import Title from '../Shared/Title';
 import { ActionButton, Table } from '../Shared';
+import ProductSaleForm from './ProductSaleForm';
+import message from '../Shared/message';
+import { IProduct } from '../../Interfaces/product';
 
 interface ISalesProps {
-  handleSubmit?: any;
-  handleUpdate?: any;
+  handleCreateSale: Function;
   handleCancel?: any;
   lists?: any;
-  shed?: any;
-  edit?: boolean;
+  sale?: any;
+  id?: string | undefined;
+  disabled?: boolean;
+  listProducts: IProduct[] | [];
 }
 
 interface IProductProps {
@@ -28,35 +31,50 @@ const columns = {
 
 
 const Sales: React.FC<ISalesProps> = ({
-  handleSubmit,
-  handleUpdate,
+  handleCreateSale,
   handleCancel,
   lists,
-  shed,
-  edit }: ISalesProps) => {
+  sale,
+  id,
+  disabled,
+  listProducts
+}: ISalesProps) => {
 
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<IProductProps[] | []>([]);
+  const [visible, setVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      codigo: sale?.codigo || '',
+      descripcion: sale?.descripcion || '',
+      valorUnitario: sale?.valorUnitario || '',
+      estado: sale?.estado || ''
+    });
+  }, [sale]);
 
   const onSubmit = () => {
-    form.validateFields().then(async (values) => {
-      setLoading(true);
-      if (edit) {
-        // editar
+    form.validateFields().then((values) => {
+      if (products.length > 0) {
+        console.log('values = ', values);
+        handleCreateSale(values);
       } else {
-        // handleSubmit(input, setLoading);
+        message({ type: 'warning', text: 'Debe seleccionar por lo menos un producto!', duration: 10000 });
       }
-      setLoading(false);
     });
   };
 
   const handleAddProduct = () => {
-    setProducts([{
+    setVisible(true);
+    /* setProducts([{
       nombre: 'Proucto 1',
       cantidad: 2,
       precioUnitario: 1200
-    }])
+    }]) */
+  };
+
+  const handleCancelProduct = () => {
+    setVisible(false);
   };
 
   const formFullLayout = {
@@ -66,9 +84,19 @@ const Sales: React.FC<ISalesProps> = ({
 
   const dateVisualization = 'DD-MM-YYYY';
 
+  const estdosLista = [{
+    id: 0,
+    name: 'En proceso'
+  }, {
+    id: 1,
+    name: 'Cancelada'
+  }, {
+    id: 2,
+    name: 'Entregada'
+  }];
+
   return (
-    <div className="custom-sales-container">
-      <Title title={edit ? 'Editar venta' : 'Registrar venta'} />
+    <>
       <Form form={form} onFinish={onSubmit}>
         <Row gutter={8}>
           <Col span={12}>
@@ -80,20 +108,20 @@ const Sales: React.FC<ISalesProps> = ({
             >
               <Input
                 maxLength={100}
-                disabled={edit}
+                disabled={disabled}
               />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
               label="Identificación del cliente"
-              name="indentificacionCliente"
+              name="idCliente"
               rules={[{ required: true, message: '¡Campo requerido!' }]}
               {...formFullLayout}
             >
               <Input
                 maxLength={12}
-                disabled={edit}
+                disabled={disabled}
               />
             </Form.Item>
           </Col>
@@ -102,7 +130,7 @@ const Sales: React.FC<ISalesProps> = ({
           <Col span={12}>
             <Form.Item
               label="Fecha de venta"
-              name="fechaRegistro"
+              name="fechaVenta"
               rules={[{ required: true, message: '¡Campo requerido!' }]}
               {...formFullLayout}
             >
@@ -115,9 +143,29 @@ const Sales: React.FC<ISalesProps> = ({
           </Col>
           <Col span={12}>
             <Form.Item
+              label="Estado"
+              name="estado"
+              {...formFullLayout}
+            >
+              <Select
+                showSearch
+                allowClear
+                optionFilterProp="children"
+              >
+                {estdosLista.map((x, i) => (
+                  <Select.Option key={`${i}_${x.id}`} value={x.id} title={x.name}>
+                    {x.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={8}>
+          <Col span={12}>
+            <Form.Item
               label="Valor total"
               name="valorTotal"
-              rules={[{ required: true, message: '¡Campo requerido!' }]}
               {...formFullLayout}
             >
               <InputNumber
@@ -164,13 +212,22 @@ const Sales: React.FC<ISalesProps> = ({
             </Button>
           </Col>
           <Col span={4}>
-            <Button htmlType="submit" type="primary" className="custom-full-width" loading={loading}>
-              {(!shed?.id) ? 'Registrar' : 'Actualizar'}
+            <Button htmlType="submit" type="primary" className="custom-full-width">
+              {(!id) ? 'Registrar' : 'Actualizar'}
             </Button>
           </Col>
         </Row>
       </Form>
-    </div>
+      <ProductSaleForm
+        visible={visible}
+        title={'Agregar producto'}
+        handleCreate={() => {}}
+        handleEditUser={() => {}}
+        handleCancel={handleCancelProduct}
+        isEdit={false}
+        listProducts={listProducts}
+      />
+    </>
   );
 };
 

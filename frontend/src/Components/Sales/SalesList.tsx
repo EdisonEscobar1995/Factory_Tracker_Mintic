@@ -1,12 +1,13 @@
 import React from 'react';
-import { EyeOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ActionButton, Loading, Table } from '../Shared';
+import moment from 'moment';
 
 const columns = {
-  valorTotal: 'Valor total',
+  fechaVenta: 'Fecha de venta',
   nombreCliente: 'Cliente',
-  indentificacionCliente: 'Identificación de cliente',
-  fechaRegistro: 'Fecha de venta'
+  idCliente: 'Identificación de cliente',
+  valorTotal: 'Valor total',
 };
 
 interface ISalesListProps {
@@ -27,12 +28,12 @@ const SalesList: React.FC<ISalesListProps> = ({
 }: ISalesListProps) => {
   const renders = [
     {
-      key: 'name',
-      render: (text: string, { rspp }: any) => `${rspp.gab.name}`,
-    },
-    {
-      key: 'owner',
-      render: (text: string, { rspp }: any) => `${rspp.company.name}`
+      key: 'fechaVenta',
+      render: (text: string, { fechaVenta }: any) => {
+        const fecha = new Date(fechaVenta.seconds * 1000 + fechaVenta.nanoseconds/1000000);
+        console.log('fecha = ', moment(fecha).format("DD-MMM-YYYY"))
+        return moment(fecha).format("DD-MM-YYYY");
+      },
     }
   ];
   return (
@@ -52,10 +53,10 @@ const SalesList: React.FC<ISalesListProps> = ({
           actions={[
             ({ record }: any) => (
               <ActionButton
-                key='view'
-                icon={<EyeOutlined />}
+                key='edit'
+                icon={<EditOutlined />}
                 type='primary'
-                text='Ver venta'
+                text='Editar venta'
                 // handleClick={() => handleView(record.id)}
                 handleClick={() => {}}
               />

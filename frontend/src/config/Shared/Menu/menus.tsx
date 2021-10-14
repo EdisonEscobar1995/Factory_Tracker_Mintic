@@ -1,6 +1,6 @@
 import {
   HomeOutlined,
-  UserOutlined,
+  AppstoreAddOutlined,
   UsergroupAddOutlined,
   UnorderedListOutlined
 } from '@ant-design/icons';
@@ -12,7 +12,7 @@ const menus = () => ({
     createMenu('Inicio', '/home', <HomeOutlined className="custom-menu-icon" />, 'home', true),
     createMenu('Usuarios', '/users', <UsergroupAddOutlined className="custom-menu-icon" />, 'users', true),
     createMenu('Productos', '/products', <UnorderedListOutlined className="custom-menu-icon" />, 'products', true),
-    createMenu('Ventas', '/sales', <UserOutlined className="custom-menu-icon" />, 'sales', true),
+    createMenu('Ventas', '/sales', <AppstoreAddOutlined className="custom-menu-icon" />, 'sales', true),
   ],
 });
 

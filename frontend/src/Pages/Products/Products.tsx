@@ -29,6 +29,7 @@ const Products: React.FC<IProductsProps> = ({ history }: IProductsProps) => {
       } catch (error) {
         console.error(error);
         setLoading(false);
+        message({ type: 'error', text: 'Error cargando los productos!' });
       }
     };
     loadProducts();
