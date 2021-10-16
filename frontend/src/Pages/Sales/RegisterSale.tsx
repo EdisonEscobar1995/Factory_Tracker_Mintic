@@ -95,6 +95,7 @@ const RegisterSale: React.FC<IRegisterSaleProps> = ({ history, match }: IRegiste
             handleCreateSale={handleCreateSale}
             disabled={(currentSale && id) ? true : false}
             listProducts={listProducts}
+            sale={currentSale}
           />
         </Loading>
       </div>

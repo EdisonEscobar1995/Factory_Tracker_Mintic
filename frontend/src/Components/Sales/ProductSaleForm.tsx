@@ -39,6 +39,8 @@ const ProductSaleForm: React.FC<IProductSaleFormProps> = ({
 
   const onOk = () => {
     form.validateFields().then((values) => {
+      console.log('values == ', values);
+      handleCreate(values, setLoading);
       /* if (isEdit) {
         const rolesAux: any = {};
         (values.roles || []).forEach((key: string) => {

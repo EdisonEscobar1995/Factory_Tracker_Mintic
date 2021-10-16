@@ -1,4 +1,4 @@
-import { collection, getDocs, query, orderBy, doc, setDoc, getDoc} from "firebase/firestore";
+import { collection, getDocs, query, orderBy, doc, setDoc, getDoc, Timestamp, deleteDoc } from "firebase/firestore";
 import { ISale } from "../Interfaces/Sale/sale";
 import { db } from "../utils/firebaseConfig";
 
@@ -25,7 +25,12 @@ const getSales = async () => {
 
 const setSale = (sale: ISale, uid: string) => {
   let referencia = doc(db, 'sales', uid);
-  return setDoc(referencia, sale);
+  const saleData = {
+    ...sale,
+    fechaVenta: Timestamp.fromDate(sale.fechaVenta)
+  }
+  debugger;
+  return setDoc(referencia, saleData);
 };
 
 const getSaleById = async (uid: string) => {
@@ -40,8 +45,14 @@ const getSaleById = async (uid: string) => {
   return response;
 };
 
+const deleteSale = async (uid: string) => {
+  let referencia = doc(db, 'sales', uid);
+  return deleteDoc(referencia);
+};
+
 export {
   getSales,
   setSale,
-  getSaleById
+  getSaleById,
+  deleteSale
 };

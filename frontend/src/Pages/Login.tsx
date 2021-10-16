@@ -3,9 +3,10 @@ import { LoginForm } from '../Components/Security/Login';
 import { Row, Col } from 'antd';
 import { ShopOutlined } from '@ant-design/icons';
 import { ILoginProps, ILoginValues } from '../Interfaces/Login/login';
-import { login, auth, loginWithGoogle } from '../api/login';
+import { login, loginWithGoogle } from '../api/login';
 import message from '../Components/Shared/message';
 import { updateProfile, User, UserCredential } from 'firebase/auth';
+import { auth } from '../utils/firebaseConfig';
 
 const Login: React.FC<ILoginProps> = ({ history, setAuthentication }: ILoginProps) => {
 

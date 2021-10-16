@@ -12,11 +12,19 @@ interface ISalesComponentProps {
   sale?: any;
   dataSales: ISale[] | [];
   loadingRequests: boolean;
-  handleSubmit?: any;
   handleCreate?: React.MouseEventHandler<HTMLElement> | undefined;
+  handleView: Function;
+  handleDelete: Function;
 }
 
-const SalesComponent: React.FC<ISalesComponentProps> = ({ sale, dataSales, loadingRequests, handleSubmit, handleCreate }: ISalesComponentProps) => {
+const SalesComponent: React.FC<ISalesComponentProps> = ({
+  sale,
+  dataSales,
+  loadingRequests,
+  handleCreate,
+  handleView,
+  handleDelete
+}: ISalesComponentProps) => {
 
   return (
     <Container>
@@ -43,6 +51,8 @@ const SalesComponent: React.FC<ISalesComponentProps> = ({ sale, dataSales, loadi
           </Row>
           <SalesList
             dataRequests={dataSales}
+            handleView={handleView}
+            handleDelete={handleDelete}
           />
         </Loading>
       </div>

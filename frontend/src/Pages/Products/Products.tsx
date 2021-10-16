@@ -41,13 +41,13 @@ const Products: React.FC<IProductsProps> = ({ history }: IProductsProps) => {
       if (filters.desc || filters.codigo) {
         dataAux = dataOrigin.filter((p: IProduct) => {
           if (filters.codigo && filters.desc) {
-            return (p.codigo.toString().toLowerCase().includes(filters.codigo) &&
-              p.descripcion.toLowerCase().includes(filters.desc)
+            return (p.codigo.toString().toLowerCase().includes(filters.codigo.toString().toLowerCase()) &&
+              p.descripcion.toLowerCase().includes(filters.desc.toLowerCase())
             );
           } else if (filters.codigo) {
-            return p.codigo.toString().toLowerCase().includes(filters.codigo)
+            return p.codigo.toString().toLowerCase().includes(filters.codigo.toString().toLowerCase())
           } else if (filters.desc) {
-            return p.descripcion.toLowerCase().includes(filters.desc)
+            return p.descripcion.toLowerCase().includes(filters.desc.toLowerCase())
           } else {
             return false
           }
@@ -70,7 +70,7 @@ const Products: React.FC<IProductsProps> = ({ history }: IProductsProps) => {
       await deleteProduct(id || '');
       const dataAux = data.filter((p: IProduct) => p.id !== id);
       setLoading(false);
-      message({ type: 'error', text: 'Producto eliminado con éxito!' });
+      message({ type: 'succes', text: 'Producto eliminado con éxito!' });
       setData(dataAux);
       setDataOrigin(dataAux);
     } catch (error) {

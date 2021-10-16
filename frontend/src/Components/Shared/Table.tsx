@@ -18,13 +18,14 @@ const Table: React.FC<ITableProps> = ({
   ...rest
 }: ITableProps) => {
   const {
-    hiddenPagination, widthActions, expandable = {}
+    hiddenPagination, widthActions, expandable = {}, scroll = undefined, sorters = undefined,
   } = rest;
 
   let columns: any = Object.keys(titles).map((x) => ({
     dataIndex: x,
     key: x,
     title: titles[x],
+    sorter: sorters ? sorters[x] : false,
   }));
 
   if (renders?.length > 0) {
@@ -78,6 +79,7 @@ const Table: React.FC<ITableProps> = ({
         pagination={hiddenPagination ? false : { ...pagination, showSizeChanger: true }}
         onChange={handleTable}
         expandable={expandable}
+        scroll={scroll}
       />
     </ConfigProvider>
   );

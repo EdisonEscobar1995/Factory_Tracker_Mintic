@@ -38,3 +38,17 @@ export const pathTreatment = (path: string): string => {
 export const ordenarLista = (list: any, field: string) => {
   return list.sort((a: any, b: any) => (a[field] > b[field]) ? 1 : -1);
 };
+
+export const estadosLista = [{
+  id: 1,
+  name: 'En proceso',
+  color: '#faad14'
+}, {
+  id: 2,
+  name: 'Cancelada',
+  color: '#eb565d'
+}, {
+  id: 3,
+  name: 'Entregada',
+  color: '#45b90c'
+}];

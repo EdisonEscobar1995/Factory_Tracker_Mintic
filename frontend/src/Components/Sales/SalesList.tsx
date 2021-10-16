@@ -2,37 +2,44 @@ import React from 'react';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ActionButton, Loading, Table } from '../Shared';
 import moment from 'moment';
+import { estadosLista } from '../../utils/common';
 
 const columns = {
   fechaVenta: 'Fecha de venta',
   nombreCliente: 'Cliente',
   idCliente: 'Identificación de cliente',
   valorTotal: 'Valor total',
+  estado: 'Estado'
 };
 
 interface ISalesListProps {
-  handleView?: Function,
-  handleShowOperator?: Function,
-  loadingRequests?: boolean,
-  dataRequests: any,
-  requestPages?: any,
-  handleRequestsTable?: Function,
-  handleFinishIntegration?: Function
+  handleView: Function;
+  loadingRequests?: boolean;
+  dataRequests: any;
+  requestPages?: any;
+  handleRequestsTable?: Function;
+  handleDelete: Function;
 }
 
 const SalesList: React.FC<ISalesListProps> = ({
   handleView,
   dataRequests,
   handleRequestsTable,
-  handleFinishIntegration
+  handleDelete
 }: ISalesListProps) => {
   const renders = [
     {
       key: 'fechaVenta',
       render: (text: string, { fechaVenta }: any) => {
         const fecha = new Date(fechaVenta.seconds * 1000 + fechaVenta.nanoseconds/1000000);
-        console.log('fecha = ', moment(fecha).format("DD-MMM-YYYY"))
-        return moment(fecha).format("DD-MM-YYYY");
+        return moment(fecha).format("DD-MM-YYYY HH:mm");
+      },
+    },
+    {
+      key: 'estado',
+      render: (text: string, { estado }: any) => {
+        const estadoA: any = estadosLista.find((e: any) => e.id === estado);
+        return (<span style={{ color: '#fff', padding: '3px 6px', background: estadoA.color }}>{estadoA.name}</span>);
       },
     }
   ];
@@ -40,14 +47,10 @@ const SalesList: React.FC<ISalesListProps> = ({
     <div>
       <Loading loading={false} custom='custom-component-spin'>
         <Table
-          rowKey='rsppId'
+          rowKey='id'
           data={(Array.isArray(dataRequests) ? dataRequests : dataRequests?.paginateIntegrations?.items || [])}
           titles={columns}
           renders={renders}
-          /* pagination={{
-            ...requestPages,
-            total: 0,
-          }} */
           handleTable={handleRequestsTable}
           widthActions={200}
           actions={[
@@ -57,8 +60,7 @@ const SalesList: React.FC<ISalesListProps> = ({
                 icon={<EditOutlined />}
                 type='primary'
                 text='Editar venta'
-                // handleClick={() => handleView(record.id)}
-                handleClick={() => {}}
+                handleClick={() => handleView(record.id)}
               />
             ),
             ({ record }: any) => (
@@ -70,8 +72,7 @@ const SalesList: React.FC<ISalesListProps> = ({
                 text='Eliminar venta'
                 confirm
                 confirmText='¿Está seguro que desea eliminar esta venta?'
-                // handleClick={() => { handleFinishIntegration(record.id); }}
-                handleClick={() => {}}
+                handleClick={() => { handleDelete(record.id); }}
               />
             ),
           ]}

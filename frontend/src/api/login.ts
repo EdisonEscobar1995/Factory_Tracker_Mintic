@@ -1,5 +1,5 @@
 import { ILoginValues, IRol, IUser } from '../Interfaces/Login/login';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, updateProfile, User, UserCredential } from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, updateProfile, User, UserCredential } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { db, auth } from '../utils/firebaseConfig';
 import { getUserById } from './user';
@@ -76,6 +76,19 @@ const getCurrentUser = async () => {
   return userLogged;
 };
 
+/* let usuario: any;
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    usuario = user;
+    console.log('El usuario logueado');
+  } else {
+    console.log('El usuario ya no esta logueado');
+    usuario = undefined;
+  }
+
+}) */
+
 /* const verifyLogin = () => {
   const user = auth.currentUser;
   console.log('user == ', user);
@@ -88,6 +101,5 @@ export {
   loginWithGoogle,
   updateDataUser,
   register,
-  getCurrentUser,
-  auth
+  getCurrentUser
 }

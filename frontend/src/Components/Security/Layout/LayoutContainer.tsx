@@ -46,6 +46,8 @@ const LayoutContainer: FC<RouteComponentProps<MatchParams>> = ({
 
   const handleCollapse = () => setCollapsed(!collapse);
 
+  console.log('usuarioAuth = ', user);
+
   return (
     <Switch>
       <Route exact path="/" render={() => <Redirect to={redirect} />} />

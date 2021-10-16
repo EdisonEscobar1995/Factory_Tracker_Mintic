@@ -6,6 +6,7 @@ import { ActionButton, Table } from '../Shared';
 import ProductSaleForm from './ProductSaleForm';
 import message from '../Shared/message';
 import { IProduct } from '../../Interfaces/product';
+import { estadosLista } from '../../utils/common';
 
 interface ISalesProps {
   handleCreateSale: Function;
@@ -24,11 +25,15 @@ interface IProductProps {
 }
 
 const columns = {
-  nombre: 'Nombre producto',
+  producto: 'Nombre producto',
   cantidad: 'Cantidad',
-  precioUnitario: 'Precio unitario',
+  valorUnitario: 'Valor unitario',
 };
 
+const sorters = {
+  cantidad: (a: any, b: any) => a.cantidad - b.cantidad,
+  valorUnitario: (a: any, b: any) => a.valorUnitario - b.valorUnitario,
+};
 
 const Sales: React.FC<ISalesProps> = ({
   handleCreateSale,
@@ -45,23 +50,66 @@ const Sales: React.FC<ISalesProps> = ({
   const [visible, setVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    form.setFieldsValue({
-      codigo: sale?.codigo || '',
-      descripcion: sale?.descripcion || '',
-      valorUnitario: sale?.valorUnitario || '',
-      estado: sale?.estado || ''
-    });
+    if (sale) {
+      console.log('sale = ', sale);
+      let fechaVenta;
+      if (sale?.fechaVenta) {
+        const fecha = new Date(sale.fechaVenta.seconds * 1000 + sale.fechaVenta.nanoseconds/1000000);
+        fechaVenta = moment(fecha, 'DD-MM-YYYY HH:mm');
+      }
+      console.log('form = ', form.getFieldsValue());
+      form.setFieldsValue({
+        nombreCliente: sale?.nombreCliente || '',
+        idCliente: sale?.idCliente || '',
+        valorTotal: sale?.valorTotal || '',
+        fechaVenta,
+        estado: sale.estado || '',
+      });
+      setProducts(sale?.productos || []);
+    }
   }, [sale]);
+
+  useEffect(() => {
+    const sumTotal = () => {
+      if (products.length > 0) {
+        let total = 0;
+        products.forEach((prod: any) => {
+          total += (prod.cantidad * prod.valorUnitario);
+        });
+        form.setFieldsValue({
+          valorTotal: total
+        });
+      }
+    };
+    sumTotal();
+  }, [products]);
 
   const onSubmit = () => {
     form.validateFields().then((values) => {
       if (products.length > 0) {
         console.log('values = ', values);
-        handleCreateSale(values);
+        const dataSale = { ...values, productos: products, fechaVenta: values.fechaVenta.toDate() };
+        console.log('dataSale = ', dataSale);
+        handleCreateSale(dataSale);
       } else {
         message({ type: 'warning', text: 'Debe seleccionar por lo menos un producto!', duration: 10000 });
       }
     });
+  };
+
+  const hanldeCreateProduct = (product: any, setLoading: Function) => {
+    setLoading(true);
+    const productsAux = [...products];
+    const item = products.find((prod: any) => prod.producto === product.producto);
+    if (item) {
+      message({ type: 'warning', text: 'El producto seleccionado ya se encuentra asociado a la compra!', duration: 6000 });
+      setLoading(false);
+    } else {
+      productsAux.push(product);
+      setProducts(productsAux);
+      setLoading(false);
+      setVisible(false);
+    }
   };
 
   const handleAddProduct = () => {
@@ -83,17 +131,6 @@ const Sales: React.FC<ISalesProps> = ({
   };
 
   const dateVisualization = 'DD-MM-YYYY';
-
-  const estdosLista = [{
-    id: 0,
-    name: 'En proceso'
-  }, {
-    id: 1,
-    name: 'Cancelada'
-  }, {
-    id: 2,
-    name: 'Entregada'
-  }];
 
   return (
     <>
@@ -138,6 +175,7 @@ const Sales: React.FC<ISalesProps> = ({
                 className="custom-full-width"
                 format={dateVisualization}
                 disabledDate={(d) => !d || d.isBefore(moment())}
+                disabled={disabled}
               />
             </Form.Item>
           </Col>
@@ -145,14 +183,13 @@ const Sales: React.FC<ISalesProps> = ({
             <Form.Item
               label="Estado"
               name="estado"
+              rules={[{ required: true, message: '¡Campo requerido!' }]}
               {...formFullLayout}
             >
               <Select
-                showSearch
-                allowClear
                 optionFilterProp="children"
               >
-                {estdosLista.map((x, i) => (
+                {estadosLista.map((x, i) => (
                   <Select.Option key={`${i}_${x.id}`} value={x.id} title={x.name}>
                     {x.name}
                   </Select.Option>
@@ -176,14 +213,16 @@ const Sales: React.FC<ISalesProps> = ({
             </Form.Item>
           </Col>
         </Row>
-        <Row className="custom-buttons-container" gutter={8} justify="end">
-          <Col span={4}>
-            <Button onClick={handleAddProduct} className="custom-full-width">
-              <PlusOutlined />
-              Agregar producto
-            </Button>
-          </Col>
-        </Row>
+        {(!id && !sale) && (
+          <Row className="custom-buttons-container" gutter={8} justify="end">
+            <Col span={4}>
+              <Button onClick={handleAddProduct} className="custom-full-width">
+                <PlusOutlined />
+                Agregar producto
+              </Button>
+            </Col>
+          </Row>
+        )}
         {products.length > 0 && (
           <Row gutter={8}>
             <Col span={24}>
@@ -191,6 +230,8 @@ const Sales: React.FC<ISalesProps> = ({
                 rowKey='id'
                 data={products}
                 titles={columns}
+                scroll={{ y: 460 }}
+                sorters={sorters}
                 actions={[
                   ({ record }: any) => (
                   <ActionButton
@@ -213,7 +254,7 @@ const Sales: React.FC<ISalesProps> = ({
           </Col>
           <Col span={4}>
             <Button htmlType="submit" type="primary" className="custom-full-width">
-              {(!id) ? 'Registrar' : 'Actualizar'}
+              {(!id && !sale) ? 'Registrar' : 'Actualizar'}
             </Button>
           </Col>
         </Row>
@@ -221,7 +262,7 @@ const Sales: React.FC<ISalesProps> = ({
       <ProductSaleForm
         visible={visible}
         title={'Agregar producto'}
-        handleCreate={() => {}}
+        handleCreate={hanldeCreateProduct}
         handleEditUser={() => {}}
         handleCancel={handleCancelProduct}
         isEdit={false}
