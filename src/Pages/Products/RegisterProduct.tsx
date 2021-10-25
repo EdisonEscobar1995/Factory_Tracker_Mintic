@@ -7,12 +7,24 @@ import message from '../../Components/Shared/message';
 import Title from '../../Components/Shared/Title';
 import { IProduct, IRegisterProductProps } from '../../Interfaces/product';
 
-const RegisterProduct: React.FC<IRegisterProductProps> = ({ history, match }: IRegisterProductProps) => {
+const RegisterProduct: React.FC<IRegisterProductProps> = ({ history, match, user }: IRegisterProductProps) => {
 
   const [currentProduct, setCurrentProduct] = useState<IProduct | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { id } = match.params;
+
+  useEffect(() => {
+    const getDisabledByRol = () => {
+      if (user) {
+        const rol = Object.keys(user.rol).find(item => item === 'admin');
+        if (!rol) {
+          history.push('/products');
+        }
+      }
+    };
+    getDisabledByRol();
+  }, [user])
 
   useEffect(() => {
     const getProduct = async () => {

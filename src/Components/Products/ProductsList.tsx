@@ -15,6 +15,7 @@ interface IProductsListProps {
   handleRequestsTable?: Function,
   handleDelete: Function,
   handleShowEdit: Function,
+  showActions: boolean,
 }
 
 const ProductsList: React.FC<IProductsListProps> = ({
@@ -22,7 +23,8 @@ const ProductsList: React.FC<IProductsListProps> = ({
   loadingRequests = false,
   handleRequestsTable,
   handleDelete,
-  handleShowEdit
+  handleShowEdit,
+  showActions
 }: IProductsListProps) => {
   
   const renders = [
@@ -42,7 +44,7 @@ const ProductsList: React.FC<IProductsListProps> = ({
           renders={renders}
           handleTable={handleRequestsTable}
           widthActions={200}
-          actions={[
+          actions={!showActions ? [
             ({ record }: any) => !record.superadmin && (
               <ActionButton
                 key='edit'
@@ -65,7 +67,7 @@ const ProductsList: React.FC<IProductsListProps> = ({
                 // handleClick={() => handleShowEdit(record)}
               />
             )
-          ]}
+          ] : []}
         />
       </Loading>
     </div>

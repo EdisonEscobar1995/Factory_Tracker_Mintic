@@ -24,8 +24,9 @@ const loginWithGoogle = async (setAuthentication: Function, setLoading: Function
     if (token) {
       await updateDataUser(user, '');
       const { providerData, uid, email } = user;
+      const userDb = await getUserById(uid);
       localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify({ providerData, uid, email }));
+      localStorage.setItem('user', JSON.stringify({ providerData, uid, email, rol: userDb?.roles }));
       setAuthentication({
         logged: true,
         loading: false,

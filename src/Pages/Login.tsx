@@ -7,6 +7,7 @@ import { login, loginWithGoogle } from '../api/login';
 import message from '../Components/Shared/message';
 import { updateProfile, User, UserCredential } from 'firebase/auth';
 import { auth } from '../utils/firebaseConfig';
+import { getUserById } from '../api/user';
 
 const Login: React.FC<ILoginProps> = ({ history, setAuthentication }: ILoginProps) => {
 
@@ -19,28 +20,16 @@ const Login: React.FC<ILoginProps> = ({ history, setAuthentication }: ILoginProp
       const user: User = userCredential.user;
       const { providerData, uid, email } = user;
       auth.currentUser?.getIdToken().then(
-        token => {
+        async (token) => {
           localStorage.setItem('token', token);
-          localStorage.setItem('user', JSON.stringify({ providerData, uid, email }));
+          const userDb = await getUserById(uid)
+          localStorage.setItem('user', JSON.stringify({ providerData, uid, email, rol: userDb?.roles }));
           setAuthentication({
             logged: true,
             loading: false,
             user
           })
           setLoading(false);
-          /* updateDataUser(user).catch((error) => {
-            console.log('error update = ', error);
-            const errorUp = 'Error de autenticacion actualizando users';
-            message({ type: 'warning', text: errorUp });
-            localStorage.clear();
-            setAuthentication({
-              logged: false,
-              loading: false,
-              user
-            });
-            setLoading(false);
-            window.location.reload();
-          }); */
         }
       )
     })

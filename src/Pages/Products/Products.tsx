@@ -9,7 +9,7 @@ import { deleteProduct, getProducts } from '../../api/product';
 import { FilterProducts, ProductsList } from '../../Components/Products';
 import { ordenarLista } from '../../utils/common';
 
-const Products: React.FC<IProductsProps> = ({ history }: IProductsProps) => {
+const Products: React.FC<IProductsProps> = ({ history, user }: IProductsProps) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [filters, setFilters] = useState({
     codigo: '',
@@ -17,7 +17,21 @@ const Products: React.FC<IProductsProps> = ({ history }: IProductsProps) => {
   });
   const [data, setData] = useState<IProduct[] | []>([]);
   const [dataOrigin, setDataOrigin] = useState<IProduct[] | []>([]);
-  // const [userEdit, setUserEdit] = useState<IUserDbProps | undefined>();
+  const [disbledData, setDisabledData] = useState<boolean>(true);
+
+  useEffect(() => {
+    const getDisabledByRol = () => {
+      let response = true;
+      if (user) {
+        const rol = user?.rol ? Object.keys(user.rol).find(item => item === 'admin') : undefined;
+        if (rol) {
+          response = false;
+        }
+      }
+      setDisabledData(response);
+    };
+    getDisabledByRol();
+  }, [user]);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -94,7 +108,7 @@ const Products: React.FC<IProductsProps> = ({ history }: IProductsProps) => {
               type="primary"
               className="custom-full-width"
               onClick={() => history.push('/product')}
-              disabled={false}
+              disabled={disbledData}
             >
               Crear producto
             </Button>
@@ -113,6 +127,7 @@ const Products: React.FC<IProductsProps> = ({ history }: IProductsProps) => {
           loadingRequests={loading}
           handleShowEdit={handleShowEdit}
           handleDelete={handleDelete}
+          showActions={disbledData}
         />
       </div>
     </Container>

@@ -2,9 +2,11 @@ import { RouteComponentProps } from "react-router-dom";
 import { MatchParams } from "./shared/common";
 
 export interface IProductsProps extends RouteComponentProps<MatchParams> {
+  user?: any
 }
 
 export interface IRegisterProductProps extends RouteComponentProps<MatchParams> {
+  user?: any;
   id?: string;
 }
 
